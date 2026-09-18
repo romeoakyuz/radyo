@@ -19,7 +19,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-          cache: 'gradle'
 
       - name: Flutter SDK Kurulumu
         uses: subosito/flutter-action@v2
@@ -27,13 +26,11 @@ jobs:
           channel: 'stable'
           cache: true
 
-      # Eksik android iskeletini oluşturur ve dosyalarınızı entegre eder:
-      - name: Android İskeletini Tamamla
+      - name: Android İskeletini Oluştur
         run: |
-          flutter create --platforms=android .
+          flutter create --platforms=android --org com.romeoakyuz .
           flutter pub get
 
-      # arm64-v8a (V8a) APK Derle:
       - name: V8a APK Derle
         run: |
           flutter build apk --release --target-platform android-arm64
