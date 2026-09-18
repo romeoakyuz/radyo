@@ -27,13 +27,18 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Paketleri Getir
-        run: flutter pub get
+      # Eksik android iskeletini oluşturur ve dosyalarınızı entegre eder:
+      - name: Android İskeletini Tamamla
+        run: |
+          flutter create --platforms=android .
+          flutter pub get
 
-      - name: V8a (arm64-v8a) APK Derle
-        run: flutter build apk --release --target-platform android-arm64
+      # arm64-v8a (V8a) APK Derle:
+      - name: V8a APK Derle
+        run: |
+          flutter build apk --release --target-platform android-arm64
 
-      - name: APK'yı Yükle
+      - name: APK'yı Yükle (Artifact)
         uses: actions/upload-artifact@v4
         with:
           name: radyo-arm64-v8a-apk
