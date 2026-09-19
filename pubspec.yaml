@@ -1,5 +1,5 @@
 name: radyo
-description: "Flutter Online Radyo APK"
+description: "Flutter Online Radyo - Kesintisiz Otomatik Yeniden Bağlanma & Widget Destekli"
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -10,7 +10,10 @@ dependencies:
   flutter:
     sdk: flutter
   just_audio: ^0.9.40
+  just_audio_background: ^0.0.1-beta.13
   audio_session: ^0.1.21
+  connectivity_plus: ^6.0.5
+  shared_preferences: ^2.3.2
   cupertino_icons: ^1.0.8
 
 dev_dependencies:
