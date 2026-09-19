@@ -88,7 +88,7 @@ class _RadioPlayerScreenState extends State<RadioPlayerScreen> with WidgetsBindi
   late final Connectivity _connectivity;
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
 
-  // İÇİNDE ÖNCEDEN YÜKLÜ HİÇBİR URL YOK - Tamamen sizin ekleyeceğiniz liste
+  // İÇİNDE ÖNCEDEN YÜKLÜ HİÇBİR URL YOK - Tamamen kullanıcının ekleyeceği liste
   List<Station> _stations = [];
   int? _currentIndex;
   bool _isLoading = false;
@@ -121,7 +121,7 @@ class _RadioPlayerScreenState extends State<RadioPlayerScreen> with WidgetsBindi
       }
     });
 
-    // İnternet kopması durumunda hatayı yakala
+    // Bağlantı koptuğunda veya hata alındığında
     _player.playbackEventStream.listen(
       (event) {},
       onError: (Object e, StackTrace stackTrace) {
@@ -132,7 +132,7 @@ class _RadioPlayerScreenState extends State<RadioPlayerScreen> with WidgetsBindi
       },
     );
 
-    // İnternet geri geldiğinde aynı kanalı devam ettir
+    // İnternet geri geldiğinde aynı kanalı otomatik sürdür
     _connectivitySubscription = _connectivity.onConnectivityChanged.listen((results) {
       final hasConnection = results.any((r) => r != ConnectivityResult.none);
       if (hasConnection) {
@@ -184,7 +184,7 @@ class _RadioPlayerScreenState extends State<RadioPlayerScreen> with WidgetsBindi
           _stations = decoded.map((item) => Station.fromMap(item)).toList();
         });
       } catch (e) {
-        debugPrint('Hata: $e');
+        debugPrint('Yükleme hatası: $e');
       }
     }
   }
@@ -207,16 +207,18 @@ class _RadioPlayerScreenState extends State<RadioPlayerScreen> with WidgetsBindi
       final station = _stations[index];
       await _player.stop();
 
-      // Bildirim ve Kilit Ekranı Widget'ına Başlık ve Bilgileri Gönder
-      final audioSource = AudioSource.uri(
-        Uri.parse(station.url),
-        tag: MediaItem(
-          id: station.id,
-          album: station.category,
-          title: station.name,
-          artist: 'Canlı Radyo',
-        ),
+      final uri = Uri.parse(station.url.trim());
+      final mediaItem = MediaItem(
+        id: station.id,
+        album: station.category,
+        title: station.name,
+        artist: 'Canlı Radyo',
       );
+
+      // m3u8 veya standart yayın türünü otomatik seçme:
+      final AudioSource audioSource = station.url.toLowerCase().contains('.m3u8')
+          ? HlsAudioSource(uri, tag: mediaItem)
+          : AudioSource.uri(uri, tag: mediaItem);
 
       await _player.setAudioSource(audioSource);
       await _player.play();
@@ -280,8 +282,8 @@ class _RadioPlayerScreenState extends State<RadioPlayerScreen> with WidgetsBindi
               TextField(
                 controller: urlController,
                 decoration: const InputDecoration(
-                  labelText: 'Yayın URL Adresi (http/https)',
-                  hintText: 'https://.../stream',
+                  labelText: 'Yayın URL Adresi (http/https veya .m3u8)',
+                  hintText: 'https://.../stream veya .m3u8',
                   labelStyle: TextStyle(color: Colors.white70),
                 ),
               ),
@@ -289,7 +291,7 @@ class _RadioPlayerScreenState extends State<RadioPlayerScreen> with WidgetsBindi
               TextField(
                 controller: categoryController,
                 decoration: const InputDecoration(
-                  labelText: 'Kategori (Örn: Pop, Haber, Slow)',
+                  labelText: 'Kategori (Örn: Pop, Arabesk, Haber)',
                   labelStyle: TextStyle(color: Colors.white70),
                 ),
               ),
