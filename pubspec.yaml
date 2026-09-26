@@ -1,0 +1,37 @@
+name: xiaomi_radyo
+description: "Xiaomi MIUI / HyperOS Uyumlu 4x1 Widget'lı ve Kesintisiz Canlı Radyo Uygulaması"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+  
+  # Arka planda kesintisiz ses ve kilit ekranı / bildirim yönetimi
+  just_audio: ^0.9.36
+  just_audio_background: ^0.0.1-beta.11
+  audio_service: ^0.18.12
+  
+  # Xiaomi 4x1 Ana ekran widget entegrasyonu
+  home_widget: ^0.7.0
+  
+  # İnternet kopma ve geri gelme takibi
+  connectivity_plus: ^6.0.3
+  
+  # Ayarları ve özel kanalları saklama
+  shared_preferences: ^2.2.3
+  
+  # Ekranı açık tutma (opsiyonel)
+  wakelock_plus: ^1.2.8
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true

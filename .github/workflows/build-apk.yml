@@ -1,0 +1,43 @@
+name: Xiaomi Radyo APK Derleme (GitHub Actions)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch: # GitHub web arayüzünden tek tıkla derleme başlatma
+
+jobs:
+  build:
+    name: Flutter APK Derle
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Depoyu Klonla (Checkout)
+        uses: actions/checkout@v4
+
+      - name: Java 17 Kurulumu
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Flutter SDK Kurulumu
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.x'
+          channel: 'stable'
+          cache: true
+
+      - name: Paket Bağımlılıklarını İndir
+        run: flutter pub get
+
+      - name: Release APK Derle
+        run: flutter build apk --release
+
+      - name: Hazır APK Dosyasını Yükle (Artifacts)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Xiaomi-Radyo-APK
+          path: build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error

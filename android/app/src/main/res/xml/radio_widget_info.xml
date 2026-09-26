@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 4x1 Hücre Boyutu: minWidth 250dp, minHeight 40dp (Android 4x1 standart) -->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="250dp"
+    android:minHeight="40dp"
+    android:targetCellWidth="4"
+    android:targetCellHeight="1"
+    android:updatePeriodMillis="86400000"
+    android:previewImage="@drawable/widget_preview"
+    android:initialLayout="@layout/widget_radio_4x1"
+    android:resizeMode="horizontal"
+    android:widgetCategory="home_screen">
+</appwidget-provider>
