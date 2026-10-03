@@ -9,6 +9,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,7 +20,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.example.xiaomi_radyo.ui.theme.Xiaomi_radyoTheme
 
-// Medya oynatıcı motorumuz
 object PlayerManager {
     var mediaPlayer: MediaPlayer? = null
     
@@ -102,122 +104,157 @@ fun RadioMainScreen() {
     var genreInput by remember { mutableStateOf("") }
     var urlInput by remember { mutableStateOf("") }
 
+    // Hangi sekmede olduğumuzu tutan değişken (0 = Radyolar, 1 = Ayarlar)
+    var selectedTab by remember { mutableStateOf(0) }
+
     Scaffold(
         topBar = {
             TopAppBar(title = { Text("Xiaomi Radyo") })
         },
         bottomBar = {
-            Surface(
-                color = MaterialTheme.colorScheme.surfaceVariant,
-                tonalElevation = 8.dp,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
+            Column {
+                // 1. Sabit Müzik Çalar (Her zaman üstte kalır)
+                Surface(
+                    color = MaterialTheme.colorScheme.surfaceVariant,
+                    tonalElevation = 8.dp,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(text = currentStationName, style = MaterialTheme.typography.titleLarge)
-                    Text(text = statusText, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.primary)
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        modifier = Modifier.fillMaxWidth()
+                    Column(
+                        modifier = Modifier.fillMaxWidth().padding(12.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Button(onClick = {
-                            RadioStateHolder.prevStation(context)
-                            PlayerManager.play(RadioStateHolder.currentStreamUrl.value)
-                        }) { Text("<< Geri") }
-                        
-                        Button(onClick = {
-                            if (isPlaying) {
-                                PlayerManager.pause()
-                            } else {
-                                if (statusText == "Duraklatıldı" && PlayerManager.mediaPlayer != null) {
-                                    PlayerManager.resume()
+                        Text(text = currentStationName, style = MaterialTheme.typography.titleMedium)
+                        Text(text = statusText, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Button(onClick = {
+                                RadioStateHolder.prevStation(context)
+                                PlayerManager.play(RadioStateHolder.currentStreamUrl.value)
+                            }) { Text("<<") }
+                            
+                            Button(onClick = {
+                                if (isPlaying) {
+                                    PlayerManager.pause()
                                 } else {
-                                    PlayerManager.play(RadioStateHolder.currentStreamUrl.value)
+                                    if (statusText == "Duraklatıldı" && PlayerManager.mediaPlayer != null) {
+                                        PlayerManager.resume()
+                                    } else {
+                                        PlayerManager.play(RadioStateHolder.currentStreamUrl.value)
+                                    }
                                 }
-                            }
-                        }) { Text(if (isPlaying) "⏸ Duraklat" else "▶ Oynat") }
-                        
-                        Button(onClick = {
-                            RadioStateHolder.nextStation(context)
-                            PlayerManager.play(RadioStateHolder.currentStreamUrl.value)
-                        }) { Text("İleri >>") }
+                            }) { Text(if (isPlaying) "⏸ Duraklat" else "▶ Oynat") }
+                            
+                            Button(onClick = {
+                                RadioStateHolder.nextStation(context)
+                                PlayerManager.play(RadioStateHolder.currentStreamUrl.value)
+                            }) { Text(">>") }
+                        }
                     }
+                }
+                
+                // 2. Alt Sekmeler (Navigation Bar)
+                NavigationBar {
+                    NavigationBarItem(
+                        icon = { Icon(Icons.Filled.Home, contentDescription = "Radyolar") },
+                        label = { Text("Radyolar") },
+                        selected = selectedTab == 0,
+                        onClick = { selectedTab = 0 }
+                    )
+                    NavigationBarItem(
+                        icon = { Icon(Icons.Filled.Settings, contentDescription = "Ayarlar") },
+                        label = { Text("Ayarlar") },
+                        selected = selectedTab == 1,
+                        onClick = { selectedTab = 1 }
+                    )
                 }
             }
         }
     ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(16.dp)
-        ) {
-            Card(modifier = Modifier.fillMaxWidth()) {
-                Column(modifier = Modifier.padding(12.dp)) {
-                    Text("Yeni Radyo Kanalı Ekle", style = MaterialTheme.typography.titleMedium)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    OutlinedTextField(
-                        value = nameInput,
-                        onValueChange = { nameInput = it },
-                        label = { Text("Kanal Adı") },
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
-                    )
-                    OutlinedTextField(
-                        value = genreInput,
-                        onValueChange = { genreInput = it },
-                        label = { Text("Tür (Örn: Pop)") },
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
-                    )
-                    OutlinedTextField(
-                        value = urlInput,
-                        onValueChange = { urlInput = it },
-                        label = { Text("Yayın URL") },
-                        modifier = Modifier.fillMaxWidth(),
-                        singleLine = true
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Button(
-                        onClick = {
-                            if (nameInput.isNotBlank() && urlInput.isNotBlank()) {
-                                RadioStateHolder.addCustomStation(context, nameInput, genreInput, urlInput)
-                                stationList = RadioStateHolder.getSavedStations(context)
-                                nameInput = ""
-                                genreInput = ""
-                                urlInput = ""
+        // Sekme 0 ise Radyo Listesini Göster
+        if (selectedTab == 0) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(16.dp)
+            ) {
+                Text("Favori Kanallar", style = MaterialTheme.typography.titleMedium)
+                Spacer(modifier = Modifier.height(8.dp))
+
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
+                    items(stationList) { station ->
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 4.dp)
+                                .clickable {
+                                    RadioStateHolder.currentStationName.value = station.name
+                                    RadioStateHolder.currentStreamUrl.value = station.streamUrl
+                                    PlayerManager.play(station.streamUrl)
+                                }
+                        ) {
+                            Column(modifier = Modifier.padding(16.dp)) {
+                                Text(text = station.name, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.primary)
+                                Text(text = "Tür: ${station.genre}", style = MaterialTheme.typography.bodyMedium)
                             }
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text("Listeye Ekle")
+                        }
                     }
                 }
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-            Text("Kayıtlı Favori Kanallar", style = MaterialTheme.typography.titleMedium)
-            Spacer(modifier = Modifier.height(8.dp))
-
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(stationList) { station ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 4.dp)
-                            .clickable {
-                                // Listeden radyoya tıklanınca otomatik çalmaya başlar
-                                RadioStateHolder.currentStationName.value = station.name
-                                RadioStateHolder.currentStreamUrl.value = station.streamUrl
-                                PlayerManager.play(station.streamUrl)
-                            }
-                    ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text(text = station.name, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.primary)
-                            Text(text = "Tür: ${station.genre}", style = MaterialTheme.typography.bodyMedium)
+        } 
+        // Sekme 1 ise Ayarlar / Kanal Ekleme Formunu Göster
+        else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .padding(16.dp)
+            ) {
+                Card(modifier = Modifier.fillMaxWidth()) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text("Yeni Radyo Kanalı Ekle", style = MaterialTheme.typography.titleMedium)
+                        Spacer(modifier = Modifier.height(16.dp))
+                        OutlinedTextField(
+                            value = nameInput,
+                            onValueChange = { nameInput = it },
+                            label = { Text("Kanal Adı (Örn: Fenomen)") },
+                            modifier = Modifier.fillMaxWidth(),
+                            singleLine = true
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        OutlinedTextField(
+                            value = genreInput,
+                            onValueChange = { genreInput = it },
+                            label = { Text("Tür (Örn: Pop)") },
+                            modifier = Modifier.fillMaxWidth(),
+                            singleLine = true
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        OutlinedTextField(
+                            value = urlInput,
+                            onValueChange = { urlInput = it },
+                            label = { Text("Yayın URL") },
+                            modifier = Modifier.fillMaxWidth(),
+                            singleLine = true
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Button(
+                            onClick = {
+                                if (nameInput.isNotBlank() && urlInput.isNotBlank()) {
+                                    RadioStateHolder.addCustomStation(context, nameInput, genreInput, urlInput)
+                                    stationList = RadioStateHolder.getSavedStations(context)
+                                    nameInput = ""
+                                    genreInput = ""
+                                    urlInput = ""
+                                    selectedTab = 0 // Kaydettikten sonra otomatik ana ekrana dön
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("Listeye Ekle ve Kaydet")
                         }
                     }
                 }
