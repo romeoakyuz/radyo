@@ -18,7 +18,6 @@ import android.os.IBinder
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.media.session.MediaButtonReceiver
 import kotlinx.coroutines.*
@@ -89,10 +88,24 @@ class RadioService : Service() {
             e.printStackTrace()
         }
 
+        val mediaButtonIntent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
+            setClass(this@RadioService, MediaButtonReceiver::class.java)
+        }
+        val mbrPendingIntent = PendingIntent.getBroadcast(
+            this@RadioService, 0, mediaButtonIntent, PendingIntent.FLAG_IMMUTABLE
+        )
+
         mediaSession = MediaSessionCompat(this, "RadioService").apply {
+            setMediaButtonReceiver(mbrPendingIntent)
             setCallback(object : MediaSessionCompat.Callback() {
                 override fun onPlay() {
-                    PlayerManager.resume(this@RadioService)
+                    val url = RadioStateHolder.currentStreamUrl.value
+                    if (url.isBlank()) {
+                        RadioStateHolder.nextStation(this@RadioService)
+                        PlayerManager.play(this@RadioService, RadioStateHolder.currentStreamUrl.value)
+                    } else {
+                        PlayerManager.play(this@RadioService, url)
+                    }
                 }
                 override fun onPause() {
                     PlayerManager.pause(this@RadioService)
@@ -126,7 +139,13 @@ class RadioService : Service() {
                 if (RadioStateHolder.isPlaying.value) {
                     PlayerManager.pause(this)
                 } else {
-                    PlayerManager.resume(this)
+                    val url = RadioStateHolder.currentStreamUrl.value
+                    if(url.isBlank()) {
+                        RadioStateHolder.nextStation(this)
+                        PlayerManager.play(this, RadioStateHolder.currentStreamUrl.value)
+                    } else {
+                        PlayerManager.play(this, url)
+                    }
                 }
             }
             "NEXT", "WIDGET_NEXT" -> {
@@ -141,6 +160,7 @@ class RadioService : Service() {
                 return START_NOT_STICKY
             }
         }
+        
         if (intent?.action != "STOP") {
             updateNotification()
         }
@@ -186,28 +206,28 @@ class RadioService : Service() {
 
         val playPauseIcon = if (isPlaying) R.drawable.ic_custom_pause else R.drawable.ic_custom_play
 
-        val customView = RemoteViews(packageName, R.layout.notification_radio)
-        customView.setTextViewText(R.id.notif_station, stationName)
-        customView.setTextViewText(R.id.notif_status, statusText)
-        customView.setImageViewResource(R.id.btn_play_pause, playPauseIcon)
-
-        customView.setOnClickPendingIntent(R.id.btn_prev, pendingPrev)
-        customView.setOnClickPendingIntent(R.id.btn_play_pause, pendingToggle)
-        customView.setOnClickPendingIntent(R.id.btn_next, pendingNext)
-
-        val notification = NotificationCompat.Builder(this, "radio_channel")
+        val notificationBuilder = NotificationCompat.Builder(this, "radio_channel")
             .setSmallIcon(R.drawable.ic_custom_play)
-            .setCustomContentView(customView)
+            .setContentTitle(stationName)
+            .setContentText(statusText)
+            .addAction(android.R.drawable.ic_media_previous, "Önceki", pendingPrev)
+            .addAction(playPauseIcon, if (isPlaying) "Duraklat" else "Oynat", pendingToggle)
+            .addAction(android.R.drawable.ic_media_next, "Sonraki", pendingNext)
+            .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
+                .setMediaSession(mediaSession.sessionToken)
+                .setShowActionsInCompactView(0, 1, 2)
+            )
             .setContentIntent(pendingOpenApp)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC) // Kilit ekranında görünmesi için
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setOngoing(isPlaying)
-            .build()
 
         if (isPlaying) {
+            val notification = notificationBuilder.setOngoing(true).build()
             startForeground(1, notification)
         } else {
             stopForeground(false)
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.cancel(1)
         }
 
         RadioWidgetProvider.updateAllWidgets(this)

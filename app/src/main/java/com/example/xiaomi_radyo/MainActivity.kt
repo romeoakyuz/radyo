@@ -25,19 +25,28 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.border
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import com.example.xiaomi_radyo.ui.theme.Xiaomi_radyoTheme
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
@@ -59,7 +68,6 @@ object PlayerManager {
         if (System.currentTimeMillis() < ignoreFocusLossUntil) {
             return@OnAudioFocusChangeListener
         }
-
         when (focusChange) {
             AudioManager.AUDIOFOCUS_LOSS,
             AudioManager.AUDIOFOCUS_LOSS_TRANSIENT -> {
@@ -94,12 +102,7 @@ object PlayerManager {
             return audioManager.requestAudioFocus(focusRequest) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
         } else {
             @Suppress("DEPRECATION")
-            val result = audioManager.requestAudioFocus(
-                focusChangeListener,
-                AudioManager.STREAM_MUSIC,
-                AudioManager.AUDIOFOCUS_GAIN
-            )
-            return result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+            return audioManager.requestAudioFocus(focusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
         }
     }
 
@@ -120,7 +123,6 @@ object PlayerManager {
         wasInterruptedBySystem = false
         appContext = context.applicationContext 
         
-        // TIKLANDIĞI AN ANINDA ARAYÜZÜ DEĞİŞTİR (Bekletme Yok)
         RadioStateHolder.isPlaying.value = true
         RadioStateHolder.statusText.value = "Bağlanıyor..."
         startBackgroundService(appContext!!)
@@ -156,9 +158,7 @@ object PlayerManager {
                 handleConnectionStall(url) 
                 true
             }
-
             scheduleRetry(url)
-
         } catch (e: Exception) {
             e.printStackTrace()
             handleConnectionStall(url)
@@ -257,41 +257,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 101)
-            }
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
-            if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
-                val intent = Intent().apply {
-                    action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
-                    data = Uri.parse("package:$packageName")
-                }
-                try {
-                    startActivity(intent)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-            }
-        }
-
-        // Xiaomi Otomatik Başlatma Kontrolü (Sadece 1 Kere Sorar)
-        val prefs = getSharedPreferences("xiaomi_radyo_prefs", Context.MODE_PRIVATE)
-        val autoStartPrompted = prefs.getBoolean("auto_start_prompted", false)
-
-        if (!autoStartPrompted) {
-            try {
-                val intent = Intent().apply {
-                    component = ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity")
-                }
-                startActivity(intent)
-                prefs.edit().putBoolean("auto_start_prompted", true).apply()
-            } catch (e: Exception) {}
-        }
-
         setContent {
             Xiaomi_radyoTheme {
                 Surface(
@@ -313,6 +278,46 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+fun checkNotificationPerm(context: Context): Boolean {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+    } else true
+}
+
+fun checkBatteryPerm(context: Context): Boolean {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val pm = context.getSystemService(Context.POWER_SERVICE) as PowerManager
+        pm.isIgnoringBatteryOptimizations(context.packageName)
+    } else true
+}
+
+@Composable
+fun CustomCompactInput(
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholder: String,
+    modifier: Modifier = Modifier
+) {
+    BasicTextField(
+        value = value,
+        onValueChange = onValueChange,
+        singleLine = true,
+        textStyle = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.onSurface),
+        modifier = modifier
+            .height(40.dp)
+            .border(1.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f), RoundedCornerShape(8.dp))
+            .padding(horizontal = 12.dp),
+        decorationBox = { innerTextField ->
+            Box(contentAlignment = Alignment.CenterStart, modifier = Modifier.fillMaxSize()) {
+                if (value.isEmpty()) {
+                    Text(placeholder, style = MaterialTheme.typography.bodySmall.copy(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)))
+                }
+                innerTextField()
+            }
+        }
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RadioMainScreen() {
@@ -328,6 +333,24 @@ fun RadioMainScreen() {
     var urlInput by remember { mutableStateOf("") }
 
     var selectedTab by remember { mutableStateOf(0) }
+
+    val prefs = context.getSharedPreferences("xiaomi_radyo_prefs", Context.MODE_PRIVATE)
+    var hasNotif by remember { mutableStateOf(checkNotificationPerm(context)) }
+    var hasBatt by remember { mutableStateOf(checkBatteryPerm(context)) }
+    var hasAuto by remember { mutableStateOf(prefs.getBoolean("auto_start_prompted", false)) }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) {
+                hasNotif = checkNotificationPerm(context)
+                hasBatt = checkBatteryPerm(context)
+                hasAuto = prefs.getBoolean("auto_start_prompted", false)
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
 
     Scaffold(
         topBar = { TopAppBar(title = { Text("Radyo") }) },
@@ -378,10 +401,16 @@ fun RadioMainScreen() {
                         onClick = { selectedTab = 0 }
                     )
                     NavigationBarItem(
-                        icon = { Icon(Icons.Filled.Settings, contentDescription = "Tüm Kanallar") },
-                        label = { Text("Tüm Kanallar") },
+                        icon = { Icon(Icons.Filled.List, contentDescription = "Tüm Kanallar") },
+                        label = { Text("Kanallar") },
                         selected = selectedTab == 1,
                         onClick = { selectedTab = 1 }
+                    )
+                    NavigationBarItem(
+                        icon = { Icon(Icons.Filled.Settings, contentDescription = "Ayarlar") },
+                        label = { Text("Ayarlar") },
+                        selected = selectedTab == 2,
+                        onClick = { selectedTab = 2 }
                     )
                 }
             }
@@ -421,25 +450,13 @@ fun RadioMainScreen() {
                         Text("Favori Kanallarınız", style = MaterialTheme.typography.titleMedium)
                         Text("Yeniden sıralamak için kartlara basılı tutun", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
                         Spacer(modifier = Modifier.height(8.dp))
-                        if (localFavs.isEmpty()) {
-                            Text(
-                                text = "Henüz favori kanalınız yok. Tüm Kanallar sekmesinden ekleyebilirsiniz.",
-                                color = MaterialTheme.colorScheme.error,
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                        }
                     }
                 }
-                
                 items(localFavs, key = { it.id }) { station ->
                     ReorderableItem(favState, key = station.id) { isDragging ->
                         val elevation by animateDpAsState(if (isDragging) 12.dp else 0.dp)
                         Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 6.dp)
-                                .shadow(elevation)
-                                .detectReorderAfterLongPress(favState)
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp).shadow(elevation).detectReorderAfterLongPress(favState)
                                 .clickable {
                                     RadioStateHolder.currentStationName.value = station.name
                                     RadioStateHolder.currentStreamUrl.value = station.streamUrl
@@ -454,7 +471,7 @@ fun RadioMainScreen() {
                     }
                 }
             }
-        } else {
+        } else if (selectedTab == 1) {
             var localAll by remember(stationList) { mutableStateOf(stationList) }
             
             val allState = rememberReorderableLazyListState(
@@ -462,9 +479,7 @@ fun RadioMainScreen() {
                     val fromIdx = from.index - 1
                     val toIdx = to.index - 1
                     if (fromIdx in localAll.indices && toIdx in localAll.indices) {
-                        localAll = localAll.toMutableList().apply {
-                            add(toIdx, removeAt(fromIdx))
-                        }
+                        localAll = localAll.toMutableList().apply { add(toIdx, removeAt(fromIdx)) }
                     }
                 },
                 onDragEnd = { _, _ ->
@@ -478,67 +493,51 @@ fun RadioMainScreen() {
                 modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 16.dp).reorderable(allState)
             ) {
                 item {
-                    Column(modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
+                    Column(modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
                         Card(modifier = Modifier.fillMaxWidth()) {
                             Column(modifier = Modifier.padding(12.dp)) {
-                                Text("Yeni Kanal Ekle", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary)
-                                Spacer(modifier = Modifier.height(4.dp))
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.spacedBy(6.dp)
-                                ) {
-                                    OutlinedTextField(
+                                Text("Yeni Kanal Ekle", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                                    CustomCompactInput(
                                         value = nameInput,
                                         onValueChange = { nameInput = it },
-                                        label = { Text("Kanal Adı") },
-                                        modifier = Modifier.weight(1f),
-                                        singleLine = true,
-                                        textStyle = MaterialTheme.typography.bodyMedium
+                                        placeholder = "Kanal Adı",
+                                        modifier = Modifier.weight(1.5f)
                                     )
-                                    OutlinedTextField(
+                                    CustomCompactInput(
                                         value = genreInput,
                                         onValueChange = { genreInput = it },
-                                        label = { Text("Tür") },
-                                        modifier = Modifier.weight(1f),
-                                        singleLine = true,
-                                        textStyle = MaterialTheme.typography.bodyMedium
+                                        placeholder = "Tür",
+                                        modifier = Modifier.weight(1f)
                                     )
                                 }
-                                Spacer(modifier = Modifier.height(2.dp))
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    OutlinedTextField(
+                                Spacer(modifier = Modifier.height(6.dp))
+                                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
+                                    CustomCompactInput(
                                         value = urlInput,
                                         onValueChange = { urlInput = it },
-                                        label = { Text("Yayın URL (.m3u8)") },
-                                        modifier = Modifier.weight(2f),
-                                        singleLine = true,
-                                        textStyle = MaterialTheme.typography.bodyMedium
+                                        placeholder = "Yayın URL",
+                                        modifier = Modifier.weight(2.5f)
                                     )
                                     Button(
                                         onClick = {
                                             if (nameInput.isNotBlank() && urlInput.isNotBlank()) {
                                                 RadioStateHolder.addCustomStation(context, nameInput, genreInput, urlInput)
                                                 stationList = RadioStateHolder.getSavedStations(context)
-                                                nameInput = ""
-                                                genreInput = ""
-                                                urlInput = ""
+                                                nameInput = ""; genreInput = ""; urlInput = ""
                                             }
                                         },
-                                        modifier = Modifier.weight(1f).padding(top = 6.dp).height(54.dp)
-                                    ) {
-                                        Text("Ekle", style = MaterialTheme.typography.bodyMedium)
-                                    }
+                                        modifier = Modifier.weight(1f).height(40.dp),
+                                        contentPadding = PaddingValues(0.dp),
+                                        shape = RoundedCornerShape(8.dp)
+                                    ) { Text("Ekle", style = MaterialTheme.typography.labelMedium) }
                                 }
                             }
                         }
-                        Spacer(modifier = Modifier.height(20.dp))
-                        Text("Tüm Kanalları Yönet", style = MaterialTheme.typography.titleMedium)
-                        Text("Yeniden sıralamak için kartlara basılı tutun", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text("Tüm Kanallar", style = MaterialTheme.typography.titleMedium)
+                        Text("Sıralamak için basılı tutun", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
                     }
                 }
 
@@ -546,21 +545,14 @@ fun RadioMainScreen() {
                     ReorderableItem(allState, key = station.id) { isDragging ->
                         val elevation by animateDpAsState(if (isDragging) 12.dp else 0.dp)
                         Card(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 4.dp)
-                                .shadow(elevation)
-                                .detectReorderAfterLongPress(allState)
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp).shadow(elevation).detectReorderAfterLongPress(allState)
                                 .clickable {
                                     RadioStateHolder.currentStationName.value = station.name
                                     RadioStateHolder.currentStreamUrl.value = station.streamUrl
                                     PlayerManager.play(context, station.streamUrl)
                                 }
                         ) {
-                            Row(
-                                modifier = Modifier.fillMaxWidth().padding(12.dp),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
+                            Row(modifier = Modifier.fillMaxWidth().padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text(text = station.name, style = MaterialTheme.typography.bodyLarge)
                                     Text(text = "Tür: ${station.genre}", style = MaterialTheme.typography.bodySmall)
@@ -568,24 +560,78 @@ fun RadioMainScreen() {
                                 IconButton(onClick = {
                                     RadioStateHolder.toggleFavorite(context, station.id)
                                     stationList = RadioStateHolder.getSavedStations(context)
-                                }) {
-                                    Icon(
-                                        imageVector = if (station.isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                                        contentDescription = "Favori",
-                                        tint = if (station.isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
-                                    )
-                                }
+                                }) { Icon(if (station.isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder, "Favori", tint = if (station.isFavorite) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface) }
                                 IconButton(onClick = {
                                     RadioStateHolder.deleteStation(context, station.id)
                                     stationList = RadioStateHolder.getSavedStations(context)
-                                }) {
-                                    Icon(
-                                        imageVector = Icons.Filled.Delete,
-                                        contentDescription = "Sil",
-                                        tint = MaterialTheme.colorScheme.error
-                                    )
-                                }
+                                }) { Icon(Icons.Filled.Delete, "Sil", tint = MaterialTheme.colorScheme.error) }
                             }
+                        }
+                    }
+                }
+            }
+        } else {
+            Column(modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp)) {
+                Text("Uygulama İzinleri", style = MaterialTheme.typography.titleLarge, color = MaterialTheme.colorScheme.primary)
+                Spacer(modifier = Modifier.height(16.dp))
+                
+                Card(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+                    Row(modifier = Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text("Bildirim İzni", style = MaterialTheme.typography.titleMedium)
+                            Text("Arka planda çalışması için gereklidir.", style = MaterialTheme.typography.bodySmall)
+                        }
+                        if (hasNotif) {
+                            Icon(Icons.Filled.CheckCircle, contentDescription = "Aktif", tint = Color(0xFF4CAF50))
+                        } else {
+                            Button(onClick = {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                    ActivityCompat.requestPermissions(context as ComponentActivity, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 101)
+                                }
+                            }) { Text("İzin Ver") }
+                        }
+                    }
+                }
+                
+                Card(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+                    Row(modifier = Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text("Pil Optimizasyonu", style = MaterialTheme.typography.titleMedium)
+                            Text("Ekran kapalıyken yayının kesilmesini engeller.", style = MaterialTheme.typography.bodySmall)
+                        }
+                        if (hasBatt) {
+                            Icon(Icons.Filled.CheckCircle, contentDescription = "Aktif", tint = Color(0xFF4CAF50))
+                        } else {
+                            Button(onClick = {
+                                val intent = Intent().apply {
+                                    action = Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+                                    data = Uri.parse("package:${context.packageName}")
+                                }
+                                context.startActivity(intent)
+                            }) { Text("Kapat") }
+                        }
+                    }
+                }
+
+                Card(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+                    Row(modifier = Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text("Otomatik Başlatma", style = MaterialTheme.typography.titleMedium)
+                            Text("Xiaomi cihazlarda teybe otomatik bağlanmayı sağlar.", style = MaterialTheme.typography.bodySmall)
+                        }
+                        if (hasAuto) {
+                            Icon(Icons.Filled.CheckCircle, contentDescription = "Aktif", tint = Color(0xFF4CAF50))
+                        } else {
+                            Button(onClick = {
+                                try {
+                                    val intent = Intent().apply {
+                                        component = ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity")
+                                    }
+                                    context.startActivity(intent)
+                                    prefs.edit().putBoolean("auto_start_prompted", true).apply()
+                                    hasAuto = true
+                                } catch (e: Exception) {}
+                            }) { Text("Ayarla") }
                         }
                     }
                 }

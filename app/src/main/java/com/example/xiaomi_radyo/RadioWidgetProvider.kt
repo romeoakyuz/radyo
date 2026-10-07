@@ -30,7 +30,6 @@ class RadioWidgetProvider : AppWidgetProvider() {
             val playPauseIcon = if (isPlaying) R.drawable.ic_custom_pause else R.drawable.ic_custom_play
             views.setImageViewResource(R.id.widget_btn_play_pause, playPauseIcon)
 
-            // Buton Intent'leri
             val prevIntent = Intent(context, RadioService::class.java).apply { action = "WIDGET_PREV" }
             val pendingPrev = PendingIntent.getService(context, 10, prevIntent, PendingIntent.FLAG_IMMUTABLE)
             views.setOnClickPendingIntent(R.id.widget_btn_prev, pendingPrev)
@@ -42,11 +41,6 @@ class RadioWidgetProvider : AppWidgetProvider() {
             val nextIntent = Intent(context, RadioService::class.java).apply { action = "WIDGET_NEXT" }
             val pendingNext = PendingIntent.getService(context, 12, nextIntent, PendingIntent.FLAG_IMMUTABLE)
             views.setOnClickPendingIntent(R.id.widget_btn_next, pendingNext)
-
-            // Widget gövdesine tıklayınca uygulama açılsın
-            val openAppIntent = Intent(context, MainActivity::class.java)
-            val pendingOpen = PendingIntent.getActivity(context, 13, openAppIntent, PendingIntent.FLAG_IMMUTABLE)
-            views.setOnClickPendingIntent(R.id.channel_info_layout, pendingOpen)
 
             appWidgetManager.updateAppWidget(appWidgetId, views)
         }
