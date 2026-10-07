@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <!-- Turuncu Radyo Gövdesi ve Anteni -->
+    <path android:fillColor="#F26D21"
+          android:pathData="M 34 50 C 34 46 37 43 41 43 L 67 43 C 71 43 74 46 74 50 L 74 68 C 74 72 71 75 67 75 L 41 75 C 37 75 34 72 34 68 Z M 44 65 C 47.31 65 50 62.31 50 59 C 50 55.69 47.31 53 44 53 C 40.69 53 38 55.69 38 59 C 38 62.31 40.69 65 44 65 Z M 56 55 L 68 55 L 68 51 L 56 51 Z M 41 43 L 60 25 L 63 28 L 47 43 Z" />
+</vector>
