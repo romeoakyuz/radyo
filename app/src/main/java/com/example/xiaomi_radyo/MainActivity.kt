@@ -215,6 +215,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun checkPermissions() {
+        val prefs = getSharedPreferences("xiaomi_radyo_prefs", Context.MODE_PRIVATE)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             RadioStateHolder.hasNotificationPermission.value = ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
         } else {
@@ -226,6 +227,7 @@ class MainActivity : ComponentActivity() {
         } else {
             RadioStateHolder.hasBatteryPermission.value = true
         }
+        RadioStateHolder.hasAutoStartPermission.value = prefs.getBoolean("autostart_granted", false)
     }
 }
 
@@ -402,6 +404,7 @@ fun RadioMainScreen() {
         } else {
             val notifGranted by RadioStateHolder.hasNotificationPermission.collectAsState()
             val batteryGranted by RadioStateHolder.hasBatteryPermission.collectAsState()
+            val autoStartGranted by RadioStateHolder.hasAutoStartPermission.collectAsState()
 
             LazyColumn(modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp)) {
                 item {
@@ -425,7 +428,10 @@ fun RadioMainScreen() {
                         }
                     })
                     Spacer(modifier = Modifier.height(12.dp))
-                    PermissionRow(title = "Xiaomi Otomatik Başlatma", description = "Cihaz açılışında arka plan için.", isGranted = false, onClick = {
+                    PermissionRow(title = "Xiaomi Otomatik Başlatma", description = "Cihaz açılışında arka plan için.", isGranted = autoStartGranted, onClick = {
+                        val prefs = context.getSharedPreferences("xiaomi_radyo_prefs", Context.MODE_PRIVATE)
+                        prefs.edit().putBoolean("autostart_granted", true).apply()
+                        RadioStateHolder.hasAutoStartPermission.value = true
                         try {
                             context.startActivity(Intent().apply {
                                 component = ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity")
