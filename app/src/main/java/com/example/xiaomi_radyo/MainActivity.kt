@@ -38,7 +38,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.xiaomi_radyo.ui.theme.Xiaomi_radyoTheme
 import org.burnoutcrew.reorderable.ReorderableItem
 import org.burnoutcrew.reorderable.detectReorderAfterLongPress
@@ -319,33 +321,58 @@ fun RadioMainScreen() {
                 },
                 onDragEnd = { _, _ -> stationList = localAll; RadioStateHolder.saveStations(context, stationList) }
             )
-            LazyColumn(state = allState.listState, modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 16.dp).reorderable(allState)) {
+            LazyColumn(state = allState.listState, modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 12.dp).reorderable(allState)) {
                 item {
-                    Column(modifier = Modifier.fillMaxWidth().padding(top = 16.dp)) {
+                    Column(modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
                         Card(modifier = Modifier.fillMaxWidth()) {
-                            Column(modifier = Modifier.padding(12.dp)) {
+                            Column(modifier = Modifier.padding(8.dp)) {
                                 Text("Yeni Kanal Ekle", style = MaterialTheme.typography.titleSmall, color = MaterialTheme.colorScheme.primary)
                                 Spacer(modifier = Modifier.height(4.dp))
-                                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                                    OutlinedTextField(value = nameInput, onValueChange = { nameInput = it }, label = { Text("Kanal Adı") }, modifier = Modifier.weight(1f), singleLine = true)
-                                    OutlinedTextField(value = genreInput, onValueChange = { genreInput = it }, label = { Text("Tür") }, modifier = Modifier.weight(1f), singleLine = true)
+                                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                                    OutlinedTextField(
+                                        value = nameInput, 
+                                        onValueChange = { nameInput = it }, 
+                                        placeholder = { Text("Kanal Adı", fontSize = 12.sp) }, 
+                                        modifier = Modifier.weight(1f).height(50.dp), 
+                                        singleLine = true, 
+                                        textStyle = TextStyle(fontSize = 14.sp)
+                                    )
+                                    OutlinedTextField(
+                                        value = genreInput, 
+                                        onValueChange = { genreInput = it }, 
+                                        placeholder = { Text("Tür", fontSize = 12.sp) }, 
+                                        modifier = Modifier.weight(1f).height(50.dp), 
+                                        singleLine = true, 
+                                        textStyle = TextStyle(fontSize = 14.sp)
+                                    )
                                 }
-                                Spacer(modifier = Modifier.height(2.dp))
-                                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(6.dp), verticalAlignment = Alignment.CenterVertically) {
-                                    OutlinedTextField(value = urlInput, onValueChange = { urlInput = it }, label = { Text("Yayın URL (.m3u8)") }, modifier = Modifier.weight(2f), singleLine = true)
-                                    Button(onClick = {
-                                        if (nameInput.isNotBlank() && urlInput.isNotBlank()) {
-                                            RadioStateHolder.addCustomStation(context, nameInput, genreInput, urlInput)
-                                            stationList = RadioStateHolder.getSavedStations(context)
-                                            nameInput = ""; genreInput = ""; urlInput = ""
-                                        }
-                                    }, modifier = Modifier.weight(1f).padding(top = 6.dp).height(54.dp)) { Text("Ekle") }
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(4.dp), verticalAlignment = Alignment.CenterVertically) {
+                                    OutlinedTextField(
+                                        value = urlInput, 
+                                        onValueChange = { urlInput = it }, 
+                                        placeholder = { Text("Yayın URL (.m3u8)", fontSize = 12.sp) }, 
+                                        modifier = Modifier.weight(2f).height(50.dp), 
+                                        singleLine = true, 
+                                        textStyle = TextStyle(fontSize = 14.sp)
+                                    )
+                                    Button(
+                                        onClick = {
+                                            if (nameInput.isNotBlank() && urlInput.isNotBlank()) {
+                                                RadioStateHolder.addCustomStation(context, nameInput, genreInput, urlInput)
+                                                stationList = RadioStateHolder.getSavedStations(context)
+                                                nameInput = ""; genreInput = ""; urlInput = ""
+                                            }
+                                        }, 
+                                        modifier = Modifier.weight(1f).height(50.dp),
+                                        shape = MaterialTheme.shapes.small
+                                    ) { Text("Ekle", fontSize = 14.sp) }
                                 }
                             }
                         }
-                        Spacer(modifier = Modifier.height(20.dp))
+                        Spacer(modifier = Modifier.height(12.dp))
                         Text("Tüm Kanallar", style = MaterialTheme.typography.titleMedium)
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(6.dp))
                     }
                 }
                 items(localAll, key = { it.id }) { station ->
