@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#121212"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="İzinler"
+        android:textColor="#F26D21"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- 1 - Bildirim İzni -->
+    <LinearLayout android:id="@+id/card_notif"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/widget_background"
+        android:padding="16dp"
+        android:layout_marginBottom="12dp">
+
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bildirim İzni" android:textColor="white" android:textSize="16sp" android:textStyle="bold"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Kilit ekranında ve arka planda çalması için gerekli" android:textColor="#AAAAAA" android:textSize="12sp"/>
+        </LinearLayout>
+        <TextView android:id="@+id/icon_notif" android:layout_width="32dp" android:layout_height="32dp" android:text="✕" android:textSize="22sp" android:gravity="center" android:textColor="#FF4444" android:background="#33FF4444"/>
+    </LinearLayout>
+
+    <!-- 2 - Pil Optimizasyonu -->
+    <LinearLayout android:id="@+id/card_battery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/widget_background"
+        android:padding="16dp"
+        android:layout_marginBottom="12dp">
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Arka Planda Çalışma" android:textColor="white" android:textSize="16sp" android:textStyle="bold"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Uygulama kapanmasın, radyo kesilmesin" android:textColor="#AAAAAA" android:textSize="12sp"/>
+        </LinearLayout>
+        <TextView android:id="@+id/icon_battery" android:layout_width="32dp" android:layout_height="32dp" android:text="✕" android:textSize="22sp" android:gravity="center" android:textColor="#FF4444" android:background="#33FF4444"/>
+    </LinearLayout>
+
+    <!-- 3 - Kilit Ekranı -->
+    <LinearLayout android:id="@+id/card_lockscreen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/widget_background"
+        android:padding="16dp"
+        android:layout_marginBottom="12dp">
+        <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:orientation="vertical">
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Kilit Ekranında Göster" android:textColor="white" android:textSize="16sp" android:textStyle="bold"/>
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Kilit ekranı ayarlarını aç" android:textColor="#AAAAAA" android:textSize="12sp"/>
+        </LinearLayout>
+        <TextView android:id="@+id/icon_lockscreen" android:layout_width="32dp" android:layout_height="32dp" android:text="→" android:textSize="22sp" android:gravity="center" android:textColor="#F26D21"/>
+    </LinearLayout>
+
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="İzin verince yeşil ✓ olacak" android:textColor="#666666" android:textSize="12sp" android:layout_marginTop="20dp" android:gravity="center"/>
+
+</LinearLayout>
