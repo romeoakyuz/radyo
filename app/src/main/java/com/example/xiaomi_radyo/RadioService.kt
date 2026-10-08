@@ -29,6 +29,7 @@ class RadioService : Service() {
     private lateinit var connectivityManager: ConnectivityManager
     private lateinit var networkCallback: ConnectivityManager.NetworkCallback
 
+    // Bluetooth kopması veya kulaklık çıkarılması durumunu algılar
     private val becomingNoisyReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action == AudioManager.ACTION_AUDIO_BECOMING_NOISY) {
@@ -85,11 +86,14 @@ class RadioService : Service() {
             .build()
         try {
             connectivityManager.registerNetworkCallback(request, networkCallback)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        } catch (e: Exception) {}
 
-        mediaSession = MediaSessionCompat(this, "RadioService").apply {
+        val mediaButtonIntent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
+            setClass(this@RadioService, MediaButtonReceiver::class.java)
+        }
+        val pendingIntent = PendingIntent.getBroadcast(this@RadioService, 0, mediaButtonIntent, PendingIntent.FLAG_IMMUTABLE)
+
+        mediaSession = MediaSessionCompat(this, "RadioService", null, pendingIntent).apply {
             setCallback(object : MediaSessionCompat.Callback() {
                 override fun onPlay() {
                     PlayerManager.resume(this@RadioService)
@@ -154,7 +158,7 @@ class RadioService : Service() {
 
         val metadataBuilder = MediaMetadataCompat.Builder()
             .putString(MediaMetadataCompat.METADATA_KEY_TITLE, stationName)
-            .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, "Radyo")
+            .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, "Xiaomi Radyo")
         mediaSession.setMetadata(metadataBuilder.build())
 
         val stateBuilder = PlaybackStateCompat.Builder()
@@ -199,15 +203,17 @@ class RadioService : Service() {
             .setSmallIcon(R.drawable.ic_custom_play)
             .setCustomContentView(customView)
             .setContentIntent(pendingOpenApp)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC) // Kilit ekranında görünmesi için
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setOngoing(isPlaying)
+            .setStyle(androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSession.sessionToken))
             .build()
 
         if (isPlaying) {
             startForeground(1, notification)
         } else {
-            stopForeground(false)
+            // BURASI GÜNCELLENDİ: Pause yapıldığında bildirim tamamen silinecek
+            stopForeground(true)
         }
 
         RadioWidgetProvider.updateAllWidgets(this)
@@ -215,12 +221,8 @@ class RadioService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        try {
-            unregisterReceiver(becomingNoisyReceiver)
-        } catch (e: Exception) {}
-        try {
-            connectivityManager.unregisterNetworkCallback(networkCallback)
-        } catch (e: Exception) {}
+        try { unregisterReceiver(becomingNoisyReceiver) } catch (e: Exception) {}
+        try { connectivityManager.unregisterNetworkCallback(networkCallback) } catch (e: Exception) {}
         mediaSession.isActive = false
         mediaSession.release()
         serviceScope.cancel()
