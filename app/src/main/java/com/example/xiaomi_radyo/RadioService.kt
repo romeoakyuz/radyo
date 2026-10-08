@@ -45,9 +45,11 @@ class RadioService : Service() {
             val channel = NotificationChannel(
                 "radio_channel",
                 "Radyo Arka Plan Servisi",
-                NotificationManager.IMPORTANCE_LOW
+                NotificationManager.IMPORTANCE_HIGH
             ).apply {
-                lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
+                lockscreenVisibility = android.app.Notification.VISIBILITY_PUBLIC
+                setShowBadge(false)
+                description = "Radyo kontrolleri kilit ekraninda gosterilir"
             }
             getSystemService(NotificationManager::class.java)?.createNotificationChannel(channel)
         }
@@ -190,7 +192,6 @@ class RadioService : Service() {
         customView.setTextViewText(R.id.notif_station, stationName)
         customView.setTextViewText(R.id.notif_status, statusText)
         customView.setImageViewResource(R.id.btn_play_pause, playPauseIcon)
-
         customView.setOnClickPendingIntent(R.id.btn_prev, pendingPrev)
         customView.setOnClickPendingIntent(R.id.btn_play_pause, pendingToggle)
         customView.setOnClickPendingIntent(R.id.btn_next, pendingNext)
@@ -198,9 +199,14 @@ class RadioService : Service() {
         val notification = NotificationCompat.Builder(this, "radio_channel")
             .setSmallIcon(R.drawable.ic_custom_play)
             .setCustomContentView(customView)
+            .setCustomBigContentView(customView)
+            .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
+                .setMediaSession(mediaSession.sessionToken)
+                .setShowActionsInCompactView(0, 1, 2))
+            .setCategory(NotificationCompat.CATEGORY_TRANSPORT)
             .setContentIntent(pendingOpenApp)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC) // Kilit ekranında görünmesi için
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
             .setOngoing(isPlaying)
             .build()
 
@@ -208,6 +214,8 @@ class RadioService : Service() {
             startForeground(1, notification)
         } else {
             stopForeground(false)
+            val nm = getSystemService(NotificationManager::class.java)
+            nm.notify(1, notification)
         }
 
         RadioWidgetProvider.updateAllWidgets(this)
