@@ -406,17 +406,17 @@ fun RadioMainScreen() {
             val batteryGranted by RadioStateHolder.hasBatteryPermission.collectAsState()
             val autoStartGranted by RadioStateHolder.hasAutoStartPermission.collectAsState()
 
-            LazyColumn(modifier = Modifier.fillMaxSize().padding(padding).padding(16.dp)) {
+            LazyColumn(modifier = Modifier.fillMaxSize().padding(padding).padding(horizontal = 16.dp, vertical = 8.dp)) {
                 item {
-                    Text("Uygulama İzinleri", style = MaterialTheme.typography.titleLarge)
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Text("Uygulama İzinleri", style = MaterialTheme.typography.titleMedium)
+                    Spacer(modifier = Modifier.height(10.dp))
 
                     PermissionRow(title = "Bildirim İzni", description = "Arka planda medya kontrolü için.", isGranted = notifGranted, onClick = {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                             ActivityCompat.requestPermissions(context as Activity, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 101)
                         }
                     })
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                     PermissionRow(title = "Pil Optimizasyonu Muafiyeti", description = "Yayının kesilmemesi için.", isGranted = batteryGranted, onClick = {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             try {
@@ -427,7 +427,7 @@ fun RadioMainScreen() {
                             } catch (e: Exception) {}
                         }
                     })
-                    Spacer(modifier = Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
                     PermissionRow(title = "Xiaomi Otomatik Başlatma", description = "Cihaz açılışında arka plan için.", isGranted = autoStartGranted, onClick = {
                         val prefs = context.getSharedPreferences("xiaomi_radyo_prefs", Context.MODE_PRIVATE)
                         prefs.edit().putBoolean("autostart_granted", true).apply()
@@ -447,15 +447,19 @@ fun RadioMainScreen() {
 @Composable
 fun PermissionRow(title: String, description: String, isGranted: Boolean, onClick: () -> Unit) {
     Card(modifier = Modifier.fillMaxWidth().clickable { onClick() }) {
-        Row(modifier = Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+        Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
-                Text(text = title, style = MaterialTheme.typography.titleMedium)
+                Text(text = title, style = MaterialTheme.typography.titleSmall)
                 Text(text = description, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
             }
             if (isGranted) {
-                Text(text = "✓", color = Color(0xFF4CAF50), style = MaterialTheme.typography.headlineMedium)
+                Text(text = "✓", color = Color(0xFF4CAF50), style = MaterialTheme.typography.titleMedium)
             } else {
-                Button(onClick = onClick) { Text("İzin Ver") }
+                Button(
+                    onClick = onClick,
+                    contentPadding = PaddingValues(horizontal = 10.dp, vertical = 2.dp),
+                    modifier = Modifier.height(34.dp)
+                ) { Text("İzin Ver", fontSize = 12.sp) }
             }
         }
     }
