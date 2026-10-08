@@ -45,11 +45,9 @@ class RadioService : Service() {
             val channel = NotificationChannel(
                 "radio_channel",
                 "Radyo Arka Plan Servisi",
-                NotificationManager.IMPORTANCE_HIGH
+                NotificationManager.IMPORTANCE_LOW
             ).apply {
-                lockscreenVisibility = android.app.Notification.VISIBILITY_PUBLIC
-                setShowBadge(false)
-                description = "Radyo kontrolleri kilit ekraninda"
+                lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
             }
             getSystemService(NotificationManager::class.java)?.createNotificationChannel(channel)
         }
@@ -81,13 +79,24 @@ class RadioService : Service() {
                 }
             }
         }
-        val request = NetworkRequest.Builder().addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET).build()
-        try { connectivityManager.registerNetworkCallback(request, networkCallback) } catch (e: Exception) {}
+        
+        val request = NetworkRequest.Builder()
+            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            .build()
+        try {
+            connectivityManager.registerNetworkCallback(request, networkCallback)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
         mediaSession = MediaSessionCompat(this, "RadioService").apply {
             setCallback(object : MediaSessionCompat.Callback() {
-                override fun onPlay() { PlayerManager.resume(this@RadioService) }
-                override fun onPause() { PlayerManager.pause(this@RadioService) }
+                override fun onPlay() {
+                    PlayerManager.resume(this@RadioService)
+                }
+                override fun onPause() {
+                    PlayerManager.pause(this@RadioService)
+                }
                 override fun onSkipToNext() {
                     RadioStateHolder.nextStation(this@RadioService)
                     PlayerManager.play(this@RadioService, RadioStateHolder.currentStreamUrl.value)
@@ -107,13 +116,18 @@ class RadioService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         MediaButtonReceiver.handleIntent(mediaSession, intent)
+
         when (intent?.action) {
             "PREV", "WIDGET_PREV" -> {
                 RadioStateHolder.prevStation(this)
                 PlayerManager.play(this, RadioStateHolder.currentStreamUrl.value)
             }
             "TOGGLE", "WIDGET_TOGGLE" -> {
-                if (RadioStateHolder.isPlaying.value) PlayerManager.pause(this) else PlayerManager.resume(this)
+                if (RadioStateHolder.isPlaying.value) {
+                    PlayerManager.pause(this)
+                } else {
+                    PlayerManager.resume(this)
+                }
             }
             "NEXT", "WIDGET_NEXT" -> {
                 RadioStateHolder.nextStation(this)
@@ -127,7 +141,9 @@ class RadioService : Service() {
                 return START_NOT_STICKY
             }
         }
-        if (intent?.action != "STOP") updateNotification()
+        if (intent?.action != "STOP") {
+            updateNotification()
+        }
         return START_STICKY
     }
 
@@ -136,33 +152,45 @@ class RadioService : Service() {
         val stationName = RadioStateHolder.currentStationName.value
         val statusText = RadioStateHolder.statusText.value
 
-        mediaSession.setMetadata(MediaMetadataCompat.Builder()
+        val metadataBuilder = MediaMetadataCompat.Builder()
             .putString(MediaMetadataCompat.METADATA_KEY_TITLE, stationName)
-            .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, statusText)
-            .build())
+            .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, "Radyo")
+        mediaSession.setMetadata(metadataBuilder.build())
 
-        mediaSession.setPlaybackState(PlaybackStateCompat.Builder()
-            .setActions(PlaybackStateCompat.ACTION_PLAY or PlaybackStateCompat.ACTION_PAUSE or PlaybackStateCompat.ACTION_SKIP_TO_NEXT or PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or PlaybackStateCompat.ACTION_PLAY_PAUSE)
-            .setState(if (isPlaying) PlaybackStateCompat.STATE_PLAYING else PlaybackStateCompat.STATE_PAUSED, 0, 1.0f)
-            .build())
+        val stateBuilder = PlaybackStateCompat.Builder()
+            .setActions(
+                PlaybackStateCompat.ACTION_PLAY or
+                PlaybackStateCompat.ACTION_PAUSE or
+                PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
+                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS or
+                PlaybackStateCompat.ACTION_PLAY_PAUSE
+            )
+            .setState(
+                if (isPlaying) PlaybackStateCompat.STATE_PLAYING else PlaybackStateCompat.STATE_PAUSED,
+                PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN,
+                1.0f
+            )
+        mediaSession.setPlaybackState(stateBuilder.build())
 
         val openAppIntent = Intent(this, MainActivity::class.java)
         val pendingOpenApp = PendingIntent.getActivity(this, 0, openAppIntent, PendingIntent.FLAG_IMMUTABLE)
 
         val prevIntent = Intent(this, RadioService::class.java).apply { action = "PREV" }
         val pendingPrev = PendingIntent.getService(this, 1, prevIntent, PendingIntent.FLAG_IMMUTABLE)
+
         val toggleIntent = Intent(this, RadioService::class.java).apply { action = "TOGGLE" }
         val pendingToggle = PendingIntent.getService(this, 2, toggleIntent, PendingIntent.FLAG_IMMUTABLE)
+
         val nextIntent = Intent(this, RadioService::class.java).apply { action = "NEXT" }
         val pendingNext = PendingIntent.getService(this, 3, nextIntent, PendingIntent.FLAG_IMMUTABLE)
 
         val playPauseIcon = if (isPlaying) R.drawable.ic_custom_pause else R.drawable.ic_custom_play
 
-        // SENIN TASARIMIN - notification_radio.xml
         val customView = RemoteViews(packageName, R.layout.notification_radio)
         customView.setTextViewText(R.id.notif_station, stationName)
         customView.setTextViewText(R.id.notif_status, statusText)
         customView.setImageViewResource(R.id.btn_play_pause, playPauseIcon)
+
         customView.setOnClickPendingIntent(R.id.btn_prev, pendingPrev)
         customView.setOnClickPendingIntent(R.id.btn_play_pause, pendingToggle)
         customView.setOnClickPendingIntent(R.id.btn_next, pendingNext)
@@ -170,30 +198,29 @@ class RadioService : Service() {
         val notification = NotificationCompat.Builder(this, "radio_channel")
             .setSmallIcon(R.drawable.ic_custom_play)
             .setCustomContentView(customView)
-            .setCustomBigContentView(customView)
-            .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
-                .setMediaSession(mediaSession.sessionToken)
-                .setShowActionsInCompactView())
-            .setCategory(NotificationCompat.CATEGORY_TRANSPORT)
             .setContentIntent(pendingOpenApp)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC) // Kilit ekranında görünmesi için
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setOngoing(isPlaying)
-            .setShowWhen(false)
             .build()
 
-        if (isPlaying) startForeground(1, notification)
-        else {
+        if (isPlaying) {
+            startForeground(1, notification)
+        } else {
             stopForeground(false)
-            getSystemService(NotificationManager::class.java).notify(1, notification)
         }
+
         RadioWidgetProvider.updateAllWidgets(this)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        try { unregisterReceiver(becomingNoisyReceiver) } catch (e: Exception) {}
-        try { connectivityManager.unregisterNetworkCallback(networkCallback) } catch (e: Exception) {}
+        try {
+            unregisterReceiver(becomingNoisyReceiver)
+        } catch (e: Exception) {}
+        try {
+            connectivityManager.unregisterNetworkCallback(networkCallback)
+        } catch (e: Exception) {}
         mediaSession.isActive = false
         mediaSession.release()
         serviceScope.cancel()
