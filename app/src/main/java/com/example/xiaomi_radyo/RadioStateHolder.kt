@@ -17,9 +17,12 @@ object RadioStateHolder {
     val currentStationName = MutableStateFlow("Kral FM")
     val currentStreamUrl = MutableStateFlow("https://ssldyg.radyotvonline.com/smil/smil:kralfm.smil/playlist.m3u8")
 
+    val hasNotificationPermission = MutableStateFlow(false)
+    val hasBatteryPermission = MutableStateFlow(false)
+    val hasAutoStartPermission = MutableStateFlow(false)
+
     private val defaultStations = listOf(
         SavedStation("1", "Kral FM", "Damar & Arabesk", "https://ssldyg.radyotvonline.com/smil/smil:kralfm.smil/playlist.m3u8", true),
-        // Güncellenen Alem FM linki
         SavedStation("2", "Alem FM", "Pop & Canlı Müzik", "http://turkmedya.radyotvonline.com/turkmedya/alemfm.stream/playlist.m3u8", true),
         SavedStation("3", "Best FM", "Ulusal / Pop", "https://ssldyg.radyotvonline.com/best/bestfm.stream/playlist.m3u8", true)
     )
