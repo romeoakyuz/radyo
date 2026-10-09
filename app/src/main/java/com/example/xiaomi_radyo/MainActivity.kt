@@ -162,7 +162,7 @@ object PlayerManager {
         try { mediaPlayer?.release(); mediaPlayer = null } catch (e: Exception) {}
         RadioStateHolder.isPlaying.value = false
         RadioStateHolder.statusText.value = "Duraklatıldı"
-        stopBackgroundService(context)
+        // GÜNCELLEME: Servisi kapatmayı sildik. Bildirim gizlenecek ama servis arka planda araçtan gelecek sinyali bekleyecek.
     }
 
     private fun silentPause(context: Context) {
@@ -171,7 +171,7 @@ object PlayerManager {
         try { mediaPlayer?.release(); mediaPlayer = null } catch (e: Exception) {}
         RadioStateHolder.isPlaying.value = false
         RadioStateHolder.statusText.value = "Duraklatıldı"
-        stopBackgroundService(context)
+        // GÜNCELLEME: Servisi kapatmayı sildik.
     }
     
     fun resume(context: Context) {
@@ -184,11 +184,6 @@ object PlayerManager {
         val safeContext = appContext ?: context.applicationContext
         val intent = Intent(safeContext, RadioService::class.java)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) safeContext.startForegroundService(intent) else safeContext.startService(intent)
-    }
-
-    private fun stopBackgroundService(context: Context) {
-        val safeContext = appContext ?: context.applicationContext
-        safeContext.stopService(Intent(safeContext, RadioService::class.java))
     }
 }
 
