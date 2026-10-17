@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+    <application
+        android:allowBackup="true"
+        android:label="Radyo"
+        android:supportsRtl="true"
+        android:theme="@android:style/Theme.Material.Light.NoActionBar"
+        android:usesCleartextTraffic="true">
+        
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.Material.Light.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Servisi sisteme tanitma (Android 14 kurallarina uygun) -->
+        <service
+            android:name=".RadioService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
+            
+        <receiver android:name=".RadioWidgetProvider" android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="ACTION_WIDGET_PLAY_PAUSE" />
+                <action android:name="ACTION_WIDGET_NEXT" />
+                <action android:name="ACTION_WIDGET_PREV" />
+                <action android:name="ACTION_STATE_CHANGED" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/radio_widget_info" />
+        </receiver>
+    </application>
+</manifest>
