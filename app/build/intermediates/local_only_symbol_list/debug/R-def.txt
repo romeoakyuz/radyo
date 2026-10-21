@@ -1,0 +1,18 @@
+R_DEF: Internal format may change without notice
+local
+drawable ic_launcher_background
+drawable ic_launcher_foreground
+drawable widget_button_bg
+id btn_widget_next
+id btn_widget_play
+id widgetNextBtn
+id widgetPlayPauseBtn
+id widgetPrevBtn
+id widgetRoot
+id widgetStationName
+id widget_status_text
+layout radyo_widget
+layout widget_radio
+mipmap ic_launcher
+mipmap ic_launcher_round
+xml radio_widget_info

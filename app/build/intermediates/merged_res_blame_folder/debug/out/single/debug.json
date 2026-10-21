@@ -1,0 +1,34 @@
+[
+    {
+        "merged": "com.heryerde.radyo.app-merged_res-40:/drawable_widget_button_bg.xml.flat",
+        "source": "com.heryerde.radyo.app-main-42:/drawable/widget_button_bg.xml"
+    },
+    {
+        "merged": "com.heryerde.radyo.app-merged_res-40:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.heryerde.radyo.app-main-42:/mipmap-anydpi-v26/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.heryerde.radyo.app-merged_res-40:/layout_radyo_widget.xml.flat",
+        "source": "com.heryerde.radyo.app-main-42:/layout/radyo_widget.xml"
+    },
+    {
+        "merged": "com.heryerde.radyo.app-merged_res-40:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.heryerde.radyo.app-main-42:/drawable/ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "com.heryerde.radyo.app-merged_res-40:/drawable_ic_launcher_background.xml.flat",
+        "source": "com.heryerde.radyo.app-main-42:/drawable/ic_launcher_background.xml"
+    },
+    {
+        "merged": "com.heryerde.radyo.app-merged_res-40:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.heryerde.radyo.app-main-42:/mipmap-anydpi-v26/ic_launcher.xml"
+    },
+    {
+        "merged": "com.heryerde.radyo.app-merged_res-40:/layout_widget_radio.xml.flat",
+        "source": "com.heryerde.radyo.app-main-42:/layout/widget_radio.xml"
+    },
+    {
+        "merged": "com.heryerde.radyo.app-merged_res-40:/xml_radio_widget_info.xml.flat",
+        "source": "com.heryerde.radyo.app-main-42:/xml/radio_widget_info.xml"
+    }
+]

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- Kısa Turuncu Anten -->
+    <path
+        android:fillColor="#FF6D00"
+        android:pathData="M58,32 L66,20 H63 L55,32 Z"/>
+    <path
+        android:fillColor="#FF6D00"
+        android:pathData="M66,18 C67.1,18 68,17.1 68,16 C68,14.9 67.1,14 66,14 C64.9,14 64,14.9 64,16 C64,17.1 64.9,18 66,18 Z"/>
+
+    <!-- Turuncu Radyo Ana Gövdesi (Genişlik: 48, Yükseklik: 44, Tam Merkezde) -->
+    <path
+        android:fillColor="#FF6D00"
+        android:pathData="M30,32 H78 C82.4,32 86,35.6 86,40 V68 C86,72.4 82.4,76 78,76 H30 C25.6,76 22,72.4 22,68 V40 C22,35.6 25.6,32 30,32 Z"/>
+
+    <!-- Siyah Hoparlör Dairesi -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M46,46 C50.42,46 54,49.58 54,54 C54,58.42 50.42,62 46,62 C41.58,62 38,58.42 38,54 C38,49.58 41.58,46 46,46 Z"/>
+
+    <!-- Siyah Sağ Düğmeler -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M68,44 C69.38,44 70.5,45.12 70.5,46.5 C70.5,47.88 69.38,49 68,49 C66.62,49 65.5,47.88 65.5,46.5 C65.5,45.12 66.62,44 68,44 Z"/>
+    <path
+        android:fillColor="#000000"
+        android:pathData="M68,59 C69.38,59 70.5,60.12 70.5,61.5 C70.5,62.88 69.38,64 68,64 C66.62,64 65.5,62.88 65.5,61.5 C65.5,60.12 66.62,59 68,59 Z"/>
+</vector>

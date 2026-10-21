@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:gravity="center_vertical">
+
+    <!-- Radyo Kanal Adı ve Durum Alanı -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:paddingStart="4dp">
+
+        <TextView
+            android:id="@+id/widgetStationName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Canlı Radyo"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:singleLine="true"/>
+
+        <TextView
+            android:id="@+id/widget_status_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Çalınıyor..."
+            android:textColor="#FF6D00"
+            android:textSize="11sp"
+            android:singleLine="true"/>
+    </LinearLayout>
+
+    <!-- Play Tuşu (Kare, Turuncu, 40dp boşluk) -->
+    <ImageButton
+        android:id="@+id/btn_widget_play"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginEnd="40dp"
+        android:background="@drawable/widget_button_bg"
+        android:contentDescription="Play"
+        android:src="@android:drawable/ic_media_play"
+        android:tint="#000000"
+        android:scaleType="centerInside"/>
+
+    <!-- İleri Tuşu (Kare, Turuncu) -->
+    <ImageButton
+        android:id="@+id/btn_widget_next"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:background="@drawable/widget_button_bg"
+        android:contentDescription="İleri"
+        android:src="@android:drawable/ic_media_next"
+        android:tint="#000000"
+        android:scaleType="centerInside"/>
+
+</LinearLayout>
