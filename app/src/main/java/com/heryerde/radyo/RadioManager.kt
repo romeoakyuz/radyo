@@ -26,21 +26,14 @@ object RadioManager {
     var isPlaying = mutableStateOf(false)
     val retryHandler = Handler(Looper.getMainLooper())
     
-    // Veri ve Zaman Sayaçları
     var downloadedBytes = mutableStateOf(0L)
     var playingTimeSeconds = mutableStateOf(0L)
     val timerHandler = Handler(Looper.getMainLooper())
     var isTimerStarted = false
 
-    fun resetDataCounter() {
-        downloadedBytes.value = 0L
-    }
-
-    fun resetTimeCounter() {
-        playingTimeSeconds.value = 0L
-    }
+    fun resetDataCounter() { downloadedBytes.value = 0L }
+    fun resetTimeCounter() { playingTimeSeconds.value = 0L }
     
-    // ZAYIF AĞLAR (EDGE) İÇİN OPTİMİZE EDİLMİŞ ÖN TANIMLI AYARLAR
     var minBufferSec: Int = 60       
     var maxBufferSec: Int = 180      
     var startThresholdSec: Float = 3.0f 
@@ -67,9 +60,7 @@ object RadioManager {
             val startThresholdMs = (startThresholdSec * 1000).toInt().coerceAtLeast(100)
             val minMs = (minBufferSec * 1000).coerceAtLeast(500)
             val maxMs = (maxBufferSec * 1000).coerceAtLeast(minMs)
-            
             val rebufferMs = (startThresholdMs * 2).coerceAtLeast(6000)
-
             val targetBufferBytes: Int = (maxBufferSec.toLong() * 16L * 1024L * 1024L).coerceIn(1024L, 512L * 1024L * 1024L).toInt()
 
             val loadControl = DefaultLoadControl.Builder()
@@ -106,6 +97,7 @@ object RadioManager {
                 .setLoadControl(loadControl)
                 .setAudioAttributes(audioAttributes, true)
                 .setHandleAudioBecomingNoisy(true)
+                .setWakeMode(C.WAKE_MODE_NETWORK)
                 .build()
 
             setupListener()

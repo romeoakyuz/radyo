@@ -61,29 +61,23 @@ class RadioService : Service() {
                     manager.notify(1, notification)
                 }
                 
-                override fun onPause() {
-                    pauseAndHideNotification()
-                }
-                
-                override fun onSkipToNext() { 
-                    RadioManager.onNextAction?.invoke() 
-                }
-                
-                override fun onSkipToPrevious() { 
-                    RadioManager.onPrevAction?.invoke() 
-                }
-                
-                override fun onStop() {
-                    pauseAndHideNotification()
-                }
+                override fun onPause() { pauseAndHideNotification() }
+                override fun onSkipToNext() { RadioManager.onNextAction?.invoke() }
+                override fun onSkipToPrevious() { RadioManager.onPrevAction?.invoke() }
+                override fun onStop() { pauseAndHideNotification() }
             })
         }
 
         startForeground(1, createNotification("Radyo Hazır", "Müzik keyfi başlıyor...", false))
 
+        // UYGULAMA KAPALIYKEN WIDGET'I SENKRONİZE EDEN KISIM
         RadioManager.onNotificationUpdate = { title, text ->
             val isPlaying = RadioManager.isPlaying.value
             updateMediaSession(title, text, isPlaying)
+            
+            // Yeni Eklenti: Servis her tepki verdiğinde widget'ı güncelleyerek buton komutlarını tazeler.
+            RadioWidgetProvider.updateAllWidgets(applicationContext)
+
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             if (isPlaying) {
                 manager.notify(1, createNotification(title, text, true))
@@ -121,6 +115,10 @@ class RadioService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val currentName = RadioManager.currentStationName.value.ifEmpty { "Radyo" }
+        val isPlaying = RadioManager.isPlaying.value
+        startForeground(1, createNotification(currentName, if (isPlaying) "Çalınıyor..." else "Durduruldu", isPlaying))
+
         when (intent?.action) {
             "ACTION_PLAY" -> {
                 if (RadioManager.player == null) {
@@ -128,23 +126,23 @@ class RadioService : Service() {
                 }
                 val stationName = RadioManager.currentStationName.value.ifEmpty { "Kral FM" }
                 if (RadioManager.player?.mediaItemCount == 0) {
-                    RadioManager.playStation("https://ssldyg.radyotvonline.com/smil/smil:kralfm.smil/playlist.m3u8", stationName)
+                    val urlToPlay = RadioManager.currentStationUrl.ifEmpty { "https://ssldyg.radyotvonline.com/smil/smil:kralfm.smil/playlist.m3u8" }
+                    RadioManager.playStation(urlToPlay, stationName)
                 } else {
                     RadioManager.resume()
                 }
                 val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 val notification = createNotification(stationName, "Çalınıyor...", true)
-                startForeground(1, notification)
                 manager.notify(1, notification)
             }
-            "ACTION_PAUSE", "ACTION_STOP" -> {
-                pauseAndHideNotification()
+            "ACTION_PAUSE", "ACTION_STOP" -> { 
+                pauseAndHideNotification() 
             }
-            "ACTION_NEXT" -> {
-                RadioManager.onNextAction?.invoke()
+            "ACTION_NEXT" -> { 
+                RadioManager.onNextAction?.invoke() 
             }
-            "ACTION_PREV" -> {
-                RadioManager.onPrevAction?.invoke()
+            "ACTION_PREV" -> { 
+                RadioManager.onPrevAction?.invoke() 
             }
         }
         return START_STICKY
@@ -211,6 +209,10 @@ class RadioService : Service() {
         }
 
         return builder.build()
+    }
+
+    override fun onTaskRemoved(rootIntent: Intent?) {
+        super.onTaskRemoved(rootIntent)
     }
 
     override fun onDestroy() {

@@ -34,10 +34,10 @@ com.heryerde.radyo.app-core-runtime-2.2.0-32 /data/data/com.termux/files/home/.g
 com.heryerde.radyo.app-jetified-ui-unit-release-33 /data/data/com.termux/files/home/.gradle/caches/transforms-3/ecf50eab72bde66663fa083af427aec0/transformed/jetified-ui-unit-release/res
 com.heryerde.radyo.app-jetified-animation-release-34 /data/data/com.termux/files/home/.gradle/caches/transforms-3/f11861c7a24c0b3125a64d90a9944505/transformed/jetified-animation-release/res
 com.heryerde.radyo.app-jetified-media3-exoplayer-1.2.0-35 /data/data/com.termux/files/home/.gradle/caches/transforms-3/f3e79f1099de6939745e9e6611c6eca5/transformed/jetified-media3-exoplayer-1.2.0/res
-com.heryerde.radyo.app-pngs-36 /storage/emulated/0/MGİT/Radyo/app/build/generated/res/pngs/debug
-com.heryerde.radyo.app-resValues-37 /storage/emulated/0/MGİT/Radyo/app/build/generated/res/resValues/debug
-com.heryerde.radyo.app-packageDebugResources-38 /storage/emulated/0/MGİT/Radyo/app/build/intermediates/incremental/debug/packageDebugResources/merged.dir
-com.heryerde.radyo.app-packageDebugResources-39 /storage/emulated/0/MGİT/Radyo/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir
-com.heryerde.radyo.app-merged_res-40 /storage/emulated/0/MGİT/Radyo/app/build/intermediates/merged_res/debug
-com.heryerde.radyo.app-debug-41 /storage/emulated/0/MGİT/Radyo/app/src/debug/res
-com.heryerde.radyo.app-main-42 /storage/emulated/0/MGİT/Radyo/app/src/main/res
+com.heryerde.radyo.app-pngs-36 /storage/emulated/0/MGİT/radyo/app/build/generated/res/pngs/debug
+com.heryerde.radyo.app-resValues-37 /storage/emulated/0/MGİT/radyo/app/build/generated/res/resValues/debug
+com.heryerde.radyo.app-packageDebugResources-38 /storage/emulated/0/MGİT/radyo/app/build/intermediates/incremental/debug/packageDebugResources/merged.dir
+com.heryerde.radyo.app-packageDebugResources-39 /storage/emulated/0/MGİT/radyo/app/build/intermediates/incremental/debug/packageDebugResources/stripped.dir
+com.heryerde.radyo.app-merged_res-40 /storage/emulated/0/MGİT/radyo/app/build/intermediates/merged_res/debug
+com.heryerde.radyo.app-debug-41 /storage/emulated/0/MGİT/radyo/app/src/debug/res
+com.heryerde.radyo.app-main-42 /storage/emulated/0/MGİT/radyo/app/src/main/res
