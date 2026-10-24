@@ -42,9 +42,14 @@ class RadioWidgetProvider : AppWidgetProvider() {
             
             val stationName = RadioManager.currentStationName.value.ifEmpty { "Canlı Radyo" }
             val isPlaying = RadioManager.isPlaying.value
+            
+            // YENİ KOD: Şarkı bilgisini ve güncel durumu artık tek merkezden çekiyoruz
+            val currentStatusOrSong = RadioManager.statusText.value
 
             views.setTextViewText(R.id.widgetStationName, stationName)
-            views.setTextViewText(R.id.widget_status_text, if (isPlaying) "Çalınıyor..."  else "Durduruldu")
+            
+            // YENİ KOD: Sabit "Çalınıyor" yazısı yerine şarkı ismini (veya Bağlanıyor vs.) ekrana basıyoruz
+            views.setTextViewText(R.id.widget_status_text, currentStatusOrSong)
             
             val playPauseIcon = if (isPlaying) {
                 android.R.drawable.ic_media_pause

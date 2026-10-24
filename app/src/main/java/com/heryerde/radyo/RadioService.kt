@@ -70,12 +70,10 @@ class RadioService : Service() {
 
         startForeground(1, createNotification("Radyo Hazır", "Müzik keyfi başlıyor...", false))
 
-        // UYGULAMA KAPALIYKEN WIDGET'I SENKRONİZE EDEN KISIM
         RadioManager.onNotificationUpdate = { title, text ->
             val isPlaying = RadioManager.isPlaying.value
             updateMediaSession(title, text, isPlaying)
             
-            // Yeni Eklenti: Servis her tepki verdiğinde widget'ı güncelleyerek buton komutlarını tazeler.
             RadioWidgetProvider.updateAllWidgets(applicationContext)
 
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -213,6 +211,10 @@ class RadioService : Service() {
 
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
+        // KRİTİK EKLENTİ: Eğer radyo durdurulmuşsa ve uygulama kapatılırsa servisi tamamen öldür.
+        if (!RadioManager.isPlaying.value) {
+            stopSelf()
+        }
     }
 
     override fun onDestroy() {

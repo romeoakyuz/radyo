@@ -131,9 +131,30 @@ object RadioManager {
 
     private fun setupListener() {
         player?.addListener(object : Player.Listener {
+            
+            override fun onMediaMetadataChanged(mediaMetadata: androidx.media3.common.MediaMetadata) {
+                val title = mediaMetadata.title?.toString()
+                val displayTitle = mediaMetadata.displayTitle?.toString()
+                val artist = mediaMetadata.artist?.toString()
+
+                val songInfo = when {
+                    !title.isNullOrBlank() && !artist.isNullOrBlank() -> "$artist - $title"
+                    !title.isNullOrBlank() -> title
+                    !displayTitle.isNullOrBlank() -> displayTitle
+                    else -> ""
+                }
+
+                if (songInfo.isNotBlank()) {
+                    statusText.value = songInfo
+                    onNotificationUpdate?.invoke(currentStationName.value, statusText.value)
+                }
+            }
+
             override fun onPlayerError(error: PlaybackException) {
                 if (!isUserPaused) {
                     statusText.value = "Bağlantı koptu..."
+                    // Hata durumunda bile buton Duraklat şeklinde kalır
+                    isPlaying.value = true
                     onNotificationUpdate?.invoke(currentStationName.value, statusText.value)
                     retryHandler.removeCallbacks(retryRunnable)
                     retryHandler.postDelayed(retryRunnable, 1000L)
@@ -141,20 +162,22 @@ object RadioManager {
             }
             
             override fun onPlaybackStateChanged(playbackState: Int) {
+                // Buton şekli her zaman kullanıcının eylemine (!isUserPaused) bağlıdır
+                isPlaying.value = !isUserPaused
+
                 if (playbackState == Player.STATE_READY && player?.playWhenReady == true) {
-                    statusText.value = "Oynatılıyor..."
-                    onNotificationUpdate?.invoke(currentStationName.value, statusText.value)
+                    if (statusText.value == "Bağlanıyor..." || statusText.value == "İnternet bekleniyor...") {
+                        statusText.value = "Oynatılıyor..."
+                    }
                     retryHandler.removeCallbacks(retryRunnable)
                 } else if (playbackState == Player.STATE_BUFFERING && !isUserPaused) {
                     statusText.value = "Bağlanıyor..."
-                    onNotificationUpdate?.invoke(currentStationName.value, statusText.value)
                 }
+                onNotificationUpdate?.invoke(currentStationName.value, statusText.value)
             }
             
             override fun onIsPlayingChanged(isPlayingState: Boolean) {
-                isPlaying.value = isPlayingState
                 if (isPlayingState) {
-                    statusText.value = "Oynatılıyor..."
                     retryHandler.removeCallbacks(retryRunnable)
                 } else {
                     if (player?.playWhenReady == false) {
@@ -163,6 +186,8 @@ object RadioManager {
                         retryHandler.removeCallbacks(retryRunnable)
                     }
                 }
+                // ExoPlayer sesi kesse bile internet beklerken buton Duraklat kalır
+                isPlaying.value = !isUserPaused
                 onNotificationUpdate?.invoke(currentStationName.value, statusText.value)
             }
         })
@@ -178,6 +203,8 @@ object RadioManager {
             player?.prepare()
             player?.play()
             statusText.value = "Bağlanıyor..."
+            
+            // Tıklanır tıklanmaz UI butonunu Duraklat moduna alıyoruz
             isPlaying.value = true
             retryHandler.removeCallbacks(retryRunnable)
             onNotificationUpdate?.invoke(name, statusText.value)
@@ -205,6 +232,8 @@ object RadioManager {
                 player?.setMediaItem(mediaItem)
                 player?.prepare()
                 player?.play()
+                
+                // Tıklanır tıklanmaz UI butonunu Duraklat moduna alıyoruz
                 isPlaying.value = true
                 statusText.value = "Bağlanıyor..."
                 onNotificationUpdate?.invoke(currentStationName.value, statusText.value)
