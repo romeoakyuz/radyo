@@ -14,6 +14,11 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
+    <!-- Yeni Eklendi: Telefon Açılışını Dinleme İzni -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <permission
@@ -46,7 +51,7 @@
 
         <service
             android:name="com.heryerde.radyo.RadioService"
-            android:exported="false"
+            android:exported="true"
             android:foregroundServiceType="mediaPlayback" />
 
         <receiver
@@ -63,13 +68,27 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/radio_widget_info" />
         </receiver>
-
-        <!-- Bluetooth ve Araç Medya Tuşları İçin Alıcı -->
         <receiver
             android:name="com.heryerde.radyo.MediaButtonReceiver"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="com.heryerde.radyo.BluetoothReceiver"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Yeni Eklendi: Telefon Açılış Dinleyicisi -->
+        <receiver
+            android:name="com.heryerde.radyo.BootReceiver"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 

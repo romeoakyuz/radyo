@@ -41,8 +41,44 @@ object RadioManager {
     var retryIntervalSec: Long = 5L  
     
     var onNotificationUpdate: ((String, String) -> Unit)? = null
-    var onNextAction: (() -> Unit)? = null
-    var onPrevAction: (() -> Unit)? = null
+
+    // YENİ EKLENDİ: Favorileri telefona kalıcı olarak kaydetme ve okuma
+    fun saveFavorites(context: Context, favorites: List<Pair<String, String>>) {
+        val prefs = context.getSharedPreferences("radyo_prefs", Context.MODE_PRIVATE)
+        val data = favorites.joinToString("@@") { "${it.first}||${it.second}" }
+        prefs.edit().putString("favorites_data", data).apply()
+    }
+
+    private fun loadFavorites(context: Context): List<Pair<String, String>> {
+        val prefs = context.getSharedPreferences("radyo_prefs", Context.MODE_PRIVATE)
+        val data = prefs.getString("favorites_data", "") ?: ""
+        if (data.isEmpty()) {
+            // Eğer hiç favori yoksa sadece Kral FM dönsün (Hata vermemesi için)
+            return listOf(Pair("Kral FM", "https://ssldyg.radyotvonline.com/smil/smil:kralfm.smil/playlist.m3u8"))
+        }
+        return data.split("@@").mapNotNull {
+            val parts = it.split("||")
+            if (parts.size == 2) Pair(parts[0], parts[1]) else null
+        }
+    }
+
+    // YENİ EKLENDİ: İleri tuşu sadece favorilerde gezer
+    fun handleNext(context: Context) {
+        val favs = loadFavorites(context)
+        if (favs.isEmpty()) return
+        val idx = favs.indexOfFirst { it.second == currentStationUrl }
+        val nextIdx = if (idx != -1 && idx < favs.size - 1) idx + 1 else 0
+        playStation(favs[nextIdx].second, favs[nextIdx].first)
+    }
+
+    // YENİ EKLENDİ: Geri tuşu sadece favorilerde gezer
+    fun handlePrev(context: Context) {
+        val favs = loadFavorites(context)
+        if (favs.isEmpty()) return
+        val idx = favs.indexOfFirst { it.second == currentStationUrl }
+        val prevIdx = if (idx > 0) idx - 1 else favs.size - 1
+        playStation(favs[prevIdx].second, favs[prevIdx].first)
+    }
 
     private val timerRunnable = object : Runnable {
         override fun run() {
@@ -153,7 +189,6 @@ object RadioManager {
             override fun onPlayerError(error: PlaybackException) {
                 if (!isUserPaused) {
                     statusText.value = "Bağlantı koptu..."
-                    // Hata durumunda bile buton Duraklat şeklinde kalır
                     isPlaying.value = true
                     onNotificationUpdate?.invoke(currentStationName.value, statusText.value)
                     retryHandler.removeCallbacks(retryRunnable)
@@ -162,7 +197,6 @@ object RadioManager {
             }
             
             override fun onPlaybackStateChanged(playbackState: Int) {
-                // Buton şekli her zaman kullanıcının eylemine (!isUserPaused) bağlıdır
                 isPlaying.value = !isUserPaused
 
                 if (playbackState == Player.STATE_READY && player?.playWhenReady == true) {
@@ -186,7 +220,6 @@ object RadioManager {
                         retryHandler.removeCallbacks(retryRunnable)
                     }
                 }
-                // ExoPlayer sesi kesse bile internet beklerken buton Duraklat kalır
                 isPlaying.value = !isUserPaused
                 onNotificationUpdate?.invoke(currentStationName.value, statusText.value)
             }
@@ -204,7 +237,6 @@ object RadioManager {
             player?.play()
             statusText.value = "Bağlanıyor..."
             
-            // Tıklanır tıklanmaz UI butonunu Duraklat moduna alıyoruz
             isPlaying.value = true
             retryHandler.removeCallbacks(retryRunnable)
             onNotificationUpdate?.invoke(name, statusText.value)
@@ -233,7 +265,6 @@ object RadioManager {
                 player?.prepare()
                 player?.play()
                 
-                // Tıklanır tıklanmaz UI butonunu Duraklat moduna alıyoruz
                 isPlaying.value = true
                 statusText.value = "Bağlanıyor..."
                 onNotificationUpdate?.invoke(currentStationName.value, statusText.value)

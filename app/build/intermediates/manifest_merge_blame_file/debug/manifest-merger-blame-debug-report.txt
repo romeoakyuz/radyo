@@ -9,197 +9,234 @@
 9        android:targetSdkVersion="34" />
 10
 11    <uses-permission android:name="android.permission.INTERNET" />
-11-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:3:5-67
-11-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:3:22-64
+11-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:3:5-67
+11-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:3:22-64
 12    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-12-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:4:5-77
-12-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:4:22-74
+12-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:4:5-77
+12-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:4:22-74
 13    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
-13-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:5:5-92
-13-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:5:22-89
+13-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:5:5-92
+13-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:5:22-89
 14    <uses-permission android:name="android.permission.WAKE_LOCK" />
-14-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:6:5-68
-14-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:6:22-65
+14-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:6:5-68
+14-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:6:22-65
 15    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-15-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:7:5-77
-15-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:7:22-74
+15-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:7:5-77
+15-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:7:22-74
 16    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
-16-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:8:5-95
-16-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:8:22-92
-17    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-17-->[androidx.media3:media3-common:1.2.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/0404dc5c1c3a0a89ff0972b49890eec1/transformed/jetified-media3-common-1.2.0/AndroidManifest.xml:22:5-79
-17-->[androidx.media3:media3-common:1.2.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/0404dc5c1c3a0a89ff0972b49890eec1/transformed/jetified-media3-common-1.2.0/AndroidManifest.xml:22:22-76
-18
-19    <permission
-19-->[androidx.core:core:1.12.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/1ee408db111997f946a0b30f5cbb606e/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
-20        android:name="com.heryerde.radyo.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-20-->[androidx.core:core:1.12.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/1ee408db111997f946a0b30f5cbb606e/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
-21        android:protectionLevel="signature" />
-21-->[androidx.core:core:1.12.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/1ee408db111997f946a0b30f5cbb606e/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
-22
-23    <uses-permission android:name="com.heryerde.radyo.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-23-->[androidx.core:core:1.12.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/1ee408db111997f946a0b30f5cbb606e/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
-23-->[androidx.core:core:1.12.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/1ee408db111997f946a0b30f5cbb606e/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
-24
-25    <application
-25-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:10:5-51:19
-26        android:allowBackup="true"
-26-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:11:9-35
-27        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-27-->[androidx.core:core:1.12.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/1ee408db111997f946a0b30f5cbb606e/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
-28        android:debuggable="true"
-29        android:extractNativeLibs="false"
-30        android:icon="@mipmap/ic_launcher"
-30-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:13:9-43
-31        android:label="Radyo"
-31-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:12:9-30
-32        android:roundIcon="@mipmap/ic_launcher_round"
-32-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:14:9-54
-33        android:supportsRtl="true"
-33-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:15:9-35
-34        android:theme="@android:style/Theme.Material.Light.NoActionBar"
-34-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:16:9-72
-35        android:usesCleartextTraffic="true" >
-35-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:17:9-44
-36        <activity
-36-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:19:9-27:20
-37            android:name="com.heryerde.radyo.MainActivity"
-37-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:20:13-41
-38            android:exported="true"
-38-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:21:13-36
-39            android:theme="@android:style/Theme.Material.Light.NoActionBar" >
-39-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:22:13-76
-40            <intent-filter>
-40-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:23:13-26:29
-41                <action android:name="android.intent.action.MAIN" />
-41-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:24:17-69
-41-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:24:25-66
-42
-43                <category android:name="android.intent.category.LAUNCHER" />
-43-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:25:17-77
-43-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:25:27-74
-44            </intent-filter>
-45        </activity>
-46
-47        <service
-47-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:29:9-32:61
-48            android:name="com.heryerde.radyo.RadioService"
-48-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:30:13-41
-49            android:exported="false"
-49-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:31:13-37
-50            android:foregroundServiceType="mediaPlayback" />
-50-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:32:13-58
+16-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:8:5-95
+16-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:8:22-92
+17    <uses-permission android:name="android.permission.BLUETOOTH" />
+17-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:9:5-68
+17-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:9:22-65
+18    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+18-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:10:5-76
+18-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:10:22-73
+19
+20    <!-- Yeni Eklendi: Telefon Açılışını Dinleme İzni -->
+21    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+21-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:13:5-81
+21-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:13:22-78
+22    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+22-->[androidx.media3:media3-common:1.2.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/0404dc5c1c3a0a89ff0972b49890eec1/transformed/jetified-media3-common-1.2.0/AndroidManifest.xml:22:5-79
+22-->[androidx.media3:media3-common:1.2.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/0404dc5c1c3a0a89ff0972b49890eec1/transformed/jetified-media3-common-1.2.0/AndroidManifest.xml:22:22-76
+23
+24    <permission
+24-->[androidx.core:core:1.12.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/1ee408db111997f946a0b30f5cbb606e/transformed/core-1.12.0/AndroidManifest.xml:22:5-24:47
+25        android:name="com.heryerde.radyo.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+25-->[androidx.core:core:1.12.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/1ee408db111997f946a0b30f5cbb606e/transformed/core-1.12.0/AndroidManifest.xml:23:9-81
+26        android:protectionLevel="signature" />
+26-->[androidx.core:core:1.12.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/1ee408db111997f946a0b30f5cbb606e/transformed/core-1.12.0/AndroidManifest.xml:24:9-44
+27
+28    <uses-permission android:name="com.heryerde.radyo.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+28-->[androidx.core:core:1.12.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/1ee408db111997f946a0b30f5cbb606e/transformed/core-1.12.0/AndroidManifest.xml:26:5-97
+28-->[androidx.core:core:1.12.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/1ee408db111997f946a0b30f5cbb606e/transformed/core-1.12.0/AndroidManifest.xml:26:22-94
+29
+30    <application
+30-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:15:5-68:19
+31        android:allowBackup="true"
+31-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:16:9-35
+32        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+32-->[androidx.core:core:1.12.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/1ee408db111997f946a0b30f5cbb606e/transformed/core-1.12.0/AndroidManifest.xml:28:18-86
+33        android:debuggable="true"
+34        android:extractNativeLibs="false"
+35        android:icon="@mipmap/ic_launcher"
+35-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:18:9-43
+36        android:label="Radyo"
+36-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:17:9-30
+37        android:roundIcon="@mipmap/ic_launcher_round"
+37-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:19:9-54
+38        android:supportsRtl="true"
+38-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:20:9-35
+39        android:theme="@android:style/Theme.Material.Light.NoActionBar"
+39-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:21:9-72
+40        android:usesCleartextTraffic="true" >
+40-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:22:9-44
+41        <activity
+41-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:24:9-32:20
+42            android:name="com.heryerde.radyo.MainActivity"
+42-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:25:13-41
+43            android:exported="true"
+43-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:26:13-36
+44            android:theme="@android:style/Theme.Material.Light.NoActionBar" >
+44-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:27:13-76
+45            <intent-filter>
+45-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:28:13-31:29
+46                <action android:name="android.intent.action.MAIN" />
+46-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:29:17-69
+46-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:29:25-66
+47
+48                <category android:name="android.intent.category.LAUNCHER" />
+48-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:30:17-77
+48-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:30:27-74
+49            </intent-filter>
+50        </activity>
 51
-52        <receiver
-52-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:34:9-42:20
-53            android:name="com.heryerde.radyo.RadioWidgetProvider"
-53-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:34:19-54
-54            android:exported="true" >
-54-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:34:55-78
-55            <intent-filter>
-55-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:35:13-40:29
-56                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-56-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:36:17-84
-56-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:36:25-81
-57                <action android:name="ACTION_WIDGET_PLAY_PAUSE" />
-57-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:37:17-67
-57-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:37:25-64
-58                <action android:name="ACTION_WIDGET_NEXT" />
-58-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:38:17-61
-58-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:38:25-58
-59                <action android:name="ACTION_STATE_CHANGED" />
-59-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:39:17-63
-59-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:39:25-60
-60            </intent-filter>
-61
-62            <meta-data
-62-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:41:13-110
-63                android:name="android.appwidget.provider"
-63-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:41:24-65
-64                android:resource="@xml/radio_widget_info" />
-64-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:41:66-107
-65        </receiver>
+52        <service
+52-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:34:9-37:61
+53            android:name="com.heryerde.radyo.RadioService"
+53-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:35:13-41
+54            android:exported="true"
+54-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:36:13-36
+55            android:foregroundServiceType="mediaPlayback" />
+55-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:37:13-58
+56
+57        <receiver
+57-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:39:9-47:20
+58            android:name="com.heryerde.radyo.RadioWidgetProvider"
+58-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:39:19-54
+59            android:exported="true" >
+59-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:39:55-78
+60            <intent-filter>
+60-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:40:13-45:29
+61                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+61-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:41:17-84
+61-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:41:25-81
+62                <action android:name="ACTION_WIDGET_PLAY_PAUSE" />
+62-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:42:17-67
+62-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:42:25-64
+63                <action android:name="ACTION_WIDGET_NEXT" />
+63-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:43:17-61
+63-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:43:25-58
+64                <action android:name="ACTION_STATE_CHANGED" />
+64-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:44:17-63
+64-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:44:25-60
+65            </intent-filter>
 66
-67        <!-- Bluetooth ve Araç Medya Tuşları İçin Alıcı -->
-68        <receiver
-68-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:45:9-49:20
-69            android:name="com.heryerde.radyo.MediaButtonReceiver"
-69-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:45:19-54
-70            android:exported="true" >
-70-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:45:55-78
-71            <intent-filter>
-71-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:46:13-48:29
-72                <action android:name="android.intent.action.MEDIA_BUTTON" />
-72-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:47:17-77
-72-->/storage/emulated/0/MGİT/Radyo/app/src/main/AndroidManifest.xml:47:25-74
-73            </intent-filter>
-74        </receiver>
-75
-76        <provider
-76-->[androidx.emoji2:emoji2:1.4.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/737abbe949c83e34dcd1acd7d009cb2a/transformed/jetified-emoji2-1.4.0/AndroidManifest.xml:24:9-32:20
-77            android:name="androidx.startup.InitializationProvider"
-77-->[androidx.emoji2:emoji2:1.4.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/737abbe949c83e34dcd1acd7d009cb2a/transformed/jetified-emoji2-1.4.0/AndroidManifest.xml:25:13-67
-78            android:authorities="com.heryerde.radyo.androidx-startup"
-78-->[androidx.emoji2:emoji2:1.4.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/737abbe949c83e34dcd1acd7d009cb2a/transformed/jetified-emoji2-1.4.0/AndroidManifest.xml:26:13-68
-79            android:exported="false" >
-79-->[androidx.emoji2:emoji2:1.4.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/737abbe949c83e34dcd1acd7d009cb2a/transformed/jetified-emoji2-1.4.0/AndroidManifest.xml:27:13-37
-80            <meta-data
-80-->[androidx.emoji2:emoji2:1.4.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/737abbe949c83e34dcd1acd7d009cb2a/transformed/jetified-emoji2-1.4.0/AndroidManifest.xml:29:13-31:52
-81                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-81-->[androidx.emoji2:emoji2:1.4.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/737abbe949c83e34dcd1acd7d009cb2a/transformed/jetified-emoji2-1.4.0/AndroidManifest.xml:30:17-75
-82                android:value="androidx.startup" />
-82-->[androidx.emoji2:emoji2:1.4.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/737abbe949c83e34dcd1acd7d009cb2a/transformed/jetified-emoji2-1.4.0/AndroidManifest.xml:31:17-49
-83            <meta-data
-83-->[androidx.lifecycle:lifecycle-process:2.6.2] /data/data/com.termux/files/home/.gradle/caches/transforms-3/3f17d1e00fac2b3e56f5392ee77a0719/transformed/jetified-lifecycle-process-2.6.2/AndroidManifest.xml:29:13-31:52
-84                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-84-->[androidx.lifecycle:lifecycle-process:2.6.2] /data/data/com.termux/files/home/.gradle/caches/transforms-3/3f17d1e00fac2b3e56f5392ee77a0719/transformed/jetified-lifecycle-process-2.6.2/AndroidManifest.xml:30:17-78
-85                android:value="androidx.startup" />
-85-->[androidx.lifecycle:lifecycle-process:2.6.2] /data/data/com.termux/files/home/.gradle/caches/transforms-3/3f17d1e00fac2b3e56f5392ee77a0719/transformed/jetified-lifecycle-process-2.6.2/AndroidManifest.xml:31:17-49
-86            <meta-data
-86-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
-87                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-87-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
-88                android:value="androidx.startup" />
-88-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
-89        </provider>
-90
-91        <receiver
-91-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
-92            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-92-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
-93            android:directBootAware="false"
-93-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
-94            android:enabled="true"
-94-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
-95            android:exported="true"
-95-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
-96            android:permission="android.permission.DUMP" >
-96-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
-97            <intent-filter>
-97-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
-98                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-98-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
-98-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
-99            </intent-filter>
-100            <intent-filter>
-100-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
-101                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-101-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
-101-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
-102            </intent-filter>
-103            <intent-filter>
-103-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
-104                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-104-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
-104-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
-105            </intent-filter>
-106            <intent-filter>
-106-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
-107                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-107-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
-107-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:25-92
-108            </intent-filter>
-109        </receiver>
-110    </application>
-111
-112</manifest>
+67            <meta-data
+67-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:46:13-110
+68                android:name="android.appwidget.provider"
+68-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:46:24-65
+69                android:resource="@xml/radio_widget_info" />
+69-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:46:66-107
+70        </receiver>
+71        <receiver
+71-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:49:9-53:20
+72            android:name="com.heryerde.radyo.MediaButtonReceiver"
+72-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:49:19-54
+73            android:exported="true" >
+73-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:49:55-78
+74            <intent-filter>
+74-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:50:13-52:29
+75                <action android:name="android.intent.action.MEDIA_BUTTON" />
+75-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:51:17-77
+75-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:51:25-74
+76            </intent-filter>
+77        </receiver>
+78        <receiver
+78-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:55:9-59:20
+79            android:name="com.heryerde.radyo.BluetoothReceiver"
+79-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:55:19-52
+80            android:exported="true" >
+80-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:55:53-76
+81            <intent-filter>
+81-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:56:13-58:29
+82                <action android:name="android.bluetooth.device.action.ACL_CONNECTED" />
+82-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:57:17-88
+82-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:57:25-85
+83            </intent-filter>
+84        </receiver>
+85
+86        <!-- Yeni Eklendi: Telefon Açılış Dinleyicisi -->
+87        <receiver
+87-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:62:9-66:20
+88            android:name="com.heryerde.radyo.BootReceiver"
+88-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:62:19-47
+89            android:exported="true" >
+89-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:62:48-71
+90            <intent-filter>
+90-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:63:13-65:29
+91                <action android:name="android.intent.action.BOOT_COMPLETED" />
+91-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:64:17-79
+91-->/storage/emulated/0/MGİT/radyo/app/src/main/AndroidManifest.xml:64:25-76
+92            </intent-filter>
+93        </receiver>
+94
+95        <provider
+95-->[androidx.emoji2:emoji2:1.4.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/737abbe949c83e34dcd1acd7d009cb2a/transformed/jetified-emoji2-1.4.0/AndroidManifest.xml:24:9-32:20
+96            android:name="androidx.startup.InitializationProvider"
+96-->[androidx.emoji2:emoji2:1.4.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/737abbe949c83e34dcd1acd7d009cb2a/transformed/jetified-emoji2-1.4.0/AndroidManifest.xml:25:13-67
+97            android:authorities="com.heryerde.radyo.androidx-startup"
+97-->[androidx.emoji2:emoji2:1.4.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/737abbe949c83e34dcd1acd7d009cb2a/transformed/jetified-emoji2-1.4.0/AndroidManifest.xml:26:13-68
+98            android:exported="false" >
+98-->[androidx.emoji2:emoji2:1.4.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/737abbe949c83e34dcd1acd7d009cb2a/transformed/jetified-emoji2-1.4.0/AndroidManifest.xml:27:13-37
+99            <meta-data
+99-->[androidx.emoji2:emoji2:1.4.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/737abbe949c83e34dcd1acd7d009cb2a/transformed/jetified-emoji2-1.4.0/AndroidManifest.xml:29:13-31:52
+100                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+100-->[androidx.emoji2:emoji2:1.4.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/737abbe949c83e34dcd1acd7d009cb2a/transformed/jetified-emoji2-1.4.0/AndroidManifest.xml:30:17-75
+101                android:value="androidx.startup" />
+101-->[androidx.emoji2:emoji2:1.4.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/737abbe949c83e34dcd1acd7d009cb2a/transformed/jetified-emoji2-1.4.0/AndroidManifest.xml:31:17-49
+102            <meta-data
+102-->[androidx.lifecycle:lifecycle-process:2.6.2] /data/data/com.termux/files/home/.gradle/caches/transforms-3/3f17d1e00fac2b3e56f5392ee77a0719/transformed/jetified-lifecycle-process-2.6.2/AndroidManifest.xml:29:13-31:52
+103                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+103-->[androidx.lifecycle:lifecycle-process:2.6.2] /data/data/com.termux/files/home/.gradle/caches/transforms-3/3f17d1e00fac2b3e56f5392ee77a0719/transformed/jetified-lifecycle-process-2.6.2/AndroidManifest.xml:30:17-78
+104                android:value="androidx.startup" />
+104-->[androidx.lifecycle:lifecycle-process:2.6.2] /data/data/com.termux/files/home/.gradle/caches/transforms-3/3f17d1e00fac2b3e56f5392ee77a0719/transformed/jetified-lifecycle-process-2.6.2/AndroidManifest.xml:31:17-49
+105            <meta-data
+105-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:29:13-31:52
+106                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+106-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:30:17-85
+107                android:value="androidx.startup" />
+107-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:31:17-49
+108        </provider>
+109
+110        <receiver
+110-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:34:9-52:20
+111            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+111-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:35:13-76
+112            android:directBootAware="false"
+112-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:36:13-44
+113            android:enabled="true"
+113-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:37:13-35
+114            android:exported="true"
+114-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:38:13-36
+115            android:permission="android.permission.DUMP" >
+115-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:39:13-57
+116            <intent-filter>
+116-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:40:13-42:29
+117                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+117-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:17-91
+117-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:41:25-88
+118            </intent-filter>
+119            <intent-filter>
+119-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:43:13-45:29
+120                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+120-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:17-85
+120-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:44:25-82
+121            </intent-filter>
+122            <intent-filter>
+122-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:46:13-48:29
+123                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+123-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:17-88
+123-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:47:25-85
+124            </intent-filter>
+125            <intent-filter>
+125-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:49:13-51:29
+126                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+126-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:17-95
+126-->[androidx.profileinstaller:profileinstaller:1.3.0] /data/data/com.termux/files/home/.gradle/caches/transforms-3/565d565e10e9a5cc3344d75a468c73e1/transformed/jetified-profileinstaller-1.3.0/AndroidManifest.xml:50:25-92
+127            </intent-filter>
+128        </receiver>
+129    </application>
+130
+131</manifest>

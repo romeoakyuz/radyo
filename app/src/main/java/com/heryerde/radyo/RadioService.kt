@@ -41,45 +41,54 @@ class RadioService : Service() {
             registerReceiver(noisyReceiver, filter)
         }
         
+        val mediaButtonIntent = Intent(Intent.ACTION_MEDIA_BUTTON).apply {
+            setClass(this@RadioService, MediaButtonReceiver::class.java)
+        }
+        val pendingIntent = PendingIntent.getBroadcast(this@RadioService, 0, mediaButtonIntent, PendingIntent.FLAG_IMMUTABLE)
+        
         mediaSession = MediaSession(this, "RadioSession").apply {
+            setMediaButtonReceiver(pendingIntent) 
             isActive = true
+            
+            val initialState = PlaybackState.Builder()
+                .setActions(PlaybackState.ACTION_PLAY or PlaybackState.ACTION_PAUSE or PlaybackState.ACTION_PLAY_PAUSE or PlaybackState.ACTION_STOP or PlaybackState.ACTION_SKIP_TO_NEXT or PlaybackState.ACTION_SKIP_TO_PREVIOUS)
+                .setState(PlaybackState.STATE_PAUSED, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1f)
+                .build()
+            setPlaybackState(initialState)
+
             setCallback(object : MediaSession.Callback() {
-                override fun onPlay() {
-                    if (RadioManager.player == null) {
-                        RadioManager.createPlayer(applicationContext)
-                    }
-                    val stationName = RadioManager.currentStationName.value.ifEmpty { "Kral FM" }
-                    if (RadioManager.player?.mediaItemCount == 0) {
-                        RadioManager.playStation("https://ssldyg.radyotvonline.com/smil/smil:kralfm.smil/playlist.m3u8", stationName)
-                    } else {
-                        RadioManager.resume()
-                    }
-                    
-                    val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                    val notification = createNotification(stationName, "Çalınıyor...", true)
-                    startForeground(1, notification)
-                    manager.notify(1, notification)
-                }
-                
+                override fun onPlay() { executePlay() }
                 override fun onPause() { pauseAndHideNotification() }
-                override fun onSkipToNext() { RadioManager.onNextAction?.invoke() }
-                override fun onSkipToPrevious() { RadioManager.onPrevAction?.invoke() }
+                
+                // YENİ EKLENDİ: İleri / Geri komutlarını doğrudan RadioManager'a gönder
+                override fun onSkipToNext() { RadioManager.handleNext(applicationContext) }
+                override fun onSkipToPrevious() { RadioManager.handlePrev(applicationContext) }
+                
                 override fun onStop() { pauseAndHideNotification() }
             })
         }
 
-        startForeground(1, createNotification("Radyo Hazır", "Müzik keyfi başlıyor...", false))
+        startForeground(1, createNotification("Radyo Hazır", "Bekleniyor...", false))
 
         RadioManager.onNotificationUpdate = { title, text ->
             val isPlaying = RadioManager.isPlaying.value
             updateMediaSession(title, text, isPlaying)
-            
             RadioWidgetProvider.updateAllWidgets(applicationContext)
-
             val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            if (isPlaying) {
-                manager.notify(1, createNotification(title, text, true))
-            }
+            manager.notify(1, createNotification(title, text, isPlaying))
+        }
+    }
+
+    private fun executePlay() {
+        if (RadioManager.player == null) {
+            RadioManager.createPlayer(applicationContext)
+        }
+        val stationName = RadioManager.currentStationName.value.ifEmpty { "Kral FM" }
+        if (RadioManager.player?.mediaItemCount == 0) {
+            val urlToPlay = RadioManager.currentStationUrl.ifEmpty { "https://ssldyg.radyotvonline.com/smil/smil:kralfm.smil/playlist.m3u8" }
+            RadioManager.playStation(urlToPlay, stationName)
+        } else {
+            RadioManager.resume()
         }
     }
 
@@ -105,42 +114,78 @@ class RadioService : Service() {
 
             val state = if (isPlaying) PlaybackState.STATE_PLAYING else PlaybackState.STATE_PAUSED
             val playbackState = PlaybackState.Builder()
-                .setActions(PlaybackState.ACTION_PLAY or PlaybackState.ACTION_PAUSE or PlaybackState.ACTION_STOP or PlaybackState.ACTION_SKIP_TO_NEXT or PlaybackState.ACTION_SKIP_TO_PREVIOUS)
+                .setActions(PlaybackState.ACTION_PLAY or PlaybackState.ACTION_PAUSE or PlaybackState.ACTION_PLAY_PAUSE or PlaybackState.ACTION_STOP or PlaybackState.ACTION_SKIP_TO_NEXT or PlaybackState.ACTION_SKIP_TO_PREVIOUS)
                 .setState(state, PlaybackState.PLAYBACK_POSITION_UNKNOWN, 1f)
                 .build()
             session.setPlaybackState(playbackState)
         }
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val currentName = RadioManager.currentStationName.value.ifEmpty { "Radyo" }
-        val isPlaying = RadioManager.isPlaying.value
-        startForeground(1, createNotification(currentName, if (isPlaying) "Çalınıyor..." else "Durduruldu", isPlaying))
+    private fun grabAudioFocus() {
+        val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val focusRequest = android.media.AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+                .setAudioAttributes(
+                    android.media.AudioAttributes.Builder()
+                        .setUsage(android.media.AudioAttributes.USAGE_MEDIA)
+                        .setContentType(android.media.AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .build()
+                )
+                .setAcceptsDelayedFocusGain(true)
+                .setOnAudioFocusChangeListener { }
+                .build()
+            audioManager.requestAudioFocus(focusRequest)
+        } else {
+            @Suppress("DEPRECATION")
+            audioManager.requestAudioFocus({ }, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN)
+        }
+    }
 
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when (intent?.action) {
+            "ACTION_BOOT_WAKE_UP" -> {
+                if (!RadioManager.isPlaying.value) {
+                    val stationName = RadioManager.currentStationName.value.ifEmpty { "Kral FM" }
+                    RadioManager.statusText.value = "Sistem başlatıldı, radyo beklemede"
+                    grabAudioFocus()
+                    RadioManager.onNotificationUpdate?.invoke(stationName, RadioManager.statusText.value)
+                }
+            }
+            "ACTION_BT_WAKE_UP" -> {
+                if (!RadioManager.isPlaying.value) {
+                    val stationName = RadioManager.currentStationName.value.ifEmpty { "Kral FM" }
+                    RadioManager.statusText.value = "Bluetooth bağlandı, oynatmayı bekliyor..."
+                    grabAudioFocus()
+                    RadioManager.onNotificationUpdate?.invoke(stationName, RadioManager.statusText.value)
+                }
+            }
+            "ACTION_APP_START" -> {
+                if (!RadioManager.isPlaying.value) {
+                    val stationName = RadioManager.currentStationName.value.ifEmpty { "Kral FM" }
+                    RadioManager.statusText.value = "Radyo Hazır"
+                    grabAudioFocus()
+                    RadioManager.onNotificationUpdate?.invoke(stationName, RadioManager.statusText.value)
+                }
+            }
             "ACTION_PLAY" -> {
-                if (RadioManager.player == null) {
-                    RadioManager.createPlayer(applicationContext)
-                }
-                val stationName = RadioManager.currentStationName.value.ifEmpty { "Kral FM" }
-                if (RadioManager.player?.mediaItemCount == 0) {
-                    val urlToPlay = RadioManager.currentStationUrl.ifEmpty { "https://ssldyg.radyotvonline.com/smil/smil:kralfm.smil/playlist.m3u8" }
-                    RadioManager.playStation(urlToPlay, stationName)
-                } else {
-                    RadioManager.resume()
-                }
-                val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                val notification = createNotification(stationName, "Çalınıyor...", true)
-                manager.notify(1, notification)
+                executePlay()
             }
             "ACTION_PAUSE", "ACTION_STOP" -> { 
                 pauseAndHideNotification() 
             }
+            
+            // YENİ EKLENDİ: İleri / Geri komutlarını doğrudan RadioManager'a gönder
             "ACTION_NEXT" -> { 
-                RadioManager.onNextAction?.invoke() 
+                RadioManager.handleNext(applicationContext) 
             }
             "ACTION_PREV" -> { 
-                RadioManager.onPrevAction?.invoke() 
+                RadioManager.handlePrev(applicationContext) 
+            }
+            
+            else -> {
+                val currentName = RadioManager.currentStationName.value.ifEmpty { "Radyo" }
+                val isPlaying = RadioManager.isPlaying.value
+                startForeground(1, createNotification(currentName, if (isPlaying) "Çalınıyor..." else "Durduruldu", isPlaying))
             }
         }
         return START_STICKY
@@ -211,7 +256,6 @@ class RadioService : Service() {
 
     override fun onTaskRemoved(rootIntent: Intent?) {
         super.onTaskRemoved(rootIntent)
-        // KRİTİK EKLENTİ: Eğer radyo durdurulmuşsa ve uygulama kapatılırsa servisi tamamen öldür.
         if (!RadioManager.isPlaying.value) {
             stopSelf()
         }

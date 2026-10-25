@@ -72,7 +72,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        val serviceIntent = Intent(this, RadioService::class.java)
+        val serviceIntent = Intent(this, RadioService::class.java).apply { action = "ACTION_WAKE_UP" }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             startForegroundService(serviceIntent)
         } else {
@@ -99,6 +99,10 @@ class MainActivity : ComponentActivity() {
                 )
             }
 
+            val favoritesList = stationsState.filter { it.isFavorite }.map { Pair(it.name, it.url) }
+            LaunchedEffect(favoritesList) {
+                RadioManager.saveFavorites(context, favoritesList)
+            }
             var selectedTab by remember { mutableStateOf(2) } 
             var activeSettingDialog by remember { mutableStateOf<Int?>(null) }
             var currentIndex by remember { mutableStateOf(0) }
@@ -118,12 +122,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
             
-            RadioManager.onNextAction = {
-                if (stationsState.isNotEmpty()) playStation(if (currentIndex < stationsState.size - 1) currentIndex + 1 else 0)
-            }
-            RadioManager.onPrevAction = {
-                if (stationsState.isNotEmpty()) playStation(if (currentIndex > 0) currentIndex - 1 else stationsState.size - 1)
-            }
 
             Column(modifier = Modifier.fillMaxSize().background(DarkBg)) {
                 Row(
@@ -423,7 +421,7 @@ class MainActivity : ComponentActivity() {
                     Text(statusText, color = Orange, fontSize = 13.sp)
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
-                        Button(onClick = { RadioManager.onPrevAction?.invoke() }, colors = ButtonDefaults.buttonColors(containerColor = Orange)) { Text("<<") }
+                        Button(onClick = { RadioManager.handlePrev(context) }, colors = ButtonDefaults.buttonColors(containerColor = Orange)) { Text("<<") }
                         Button(onClick = {
                             if (isPlaying) {
                                 RadioManager.pause()
@@ -447,7 +445,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         }, colors = ButtonDefaults.buttonColors(containerColor = Orange)) { Text(if (isPlaying) "|| Duraklat" else "► Oynat") }
-                        Button(onClick = { RadioManager.onNextAction?.invoke() }, colors = ButtonDefaults.buttonColors(containerColor = Orange)) { Text(">>") }
+                        Button(onClick = { RadioManager.handleNext(context) }, colors = ButtonDefaults.buttonColors(containerColor = Orange)) { Text(">>") }
                     }
                 }
                 
